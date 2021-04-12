@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1618266558 source:e:\users\ramiro\documents\facultad\3ro\arqui\maquina virtual\traductor\main.c
+	<stdio.h>
+	<stdlib.h>
+	"dic-mnemo.h"
+
+1618266357 source:e:\users\ramiro\documents\facultad\3ro\arqui\maquina virtual\traductor\dic-mnemo.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	"dic-mnemo.h"
+
+1618266557 e:\users\ramiro\documents\facultad\3ro\arqui\maquina virtual\traductor\dic-mnemo.h
+
