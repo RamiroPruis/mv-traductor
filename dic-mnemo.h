@@ -1,6 +1,7 @@
 #define CANT 32
 
-typedef struct{
+typedef struct
+{
   char mnemo[10];
   int hex;
 } Tvec;
