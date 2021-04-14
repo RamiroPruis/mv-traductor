@@ -5,7 +5,6 @@
 
 
 void creadicc(Tvec vec[]){
-
   strcpy(vec[0].mnemo,"MOV");
   vec[0].hex=0x00;
   strcpy(vec[1].mnemo,"ADD");
