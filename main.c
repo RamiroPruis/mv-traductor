@@ -4,13 +4,7 @@
 #include <string.h>
 #define MAX 10
 
-typedef struct{
-  int cod;  //codigo instruccion
-  int topA; //tipo operando A
-  int topB; //tipo operando B
-  int vopA; //valor operando A
-  int vopB; //valor operando B
-} instruccion;
+
 
 
 void Desarma(char[],instruccion*,Tvec[]);
@@ -25,7 +19,7 @@ int main()
     instruccion num;
 
     creadicc(Mnemonicos);
-    strcpy(linea,"SHR [%A4],@2;");
+    strcpy(linea,"SHR `A`,2;");
     Desarma(linea,&num,Mnemonicos);
     /*if (arch=fopen(nombrearch,"r")==NULL) return 1;
     while (fgets(linea,sizeof(linea),nombrearch)!=NULL){
