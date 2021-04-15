@@ -10,12 +10,25 @@ int main()
 {
     Tvec Mnemonicos[CANT];
     char linea[255];
-    FILE *arch, *nombrearch;
+
+    // Variables para :Lectura archivos
+    FILE *arch, *nombrearch; //¿NombreArch para que?
+    char *filename;          //Viene por parametro del main
+    int topeLineas = 0;
+    char vecLineas[100];
+
     instruccion num;
     TvecRotulo rotulos;
 
     //Inicializaciones
     rotulos.tope = -1;
+
+    // COMIENZA Lectura del archivo .asm
+    if (arch = fopen(filename, "r") == NULL)
+        return 1;
+    while (fgets(vecLineas[topeLineas], 256, arch) != NULL)
+        topeLineas++;
+    // FIN Lectura del archivo .asm
 
     creadicc(Mnemonicos);
     strcpy(linea, "otro:LDL OTRO");
@@ -66,7 +79,7 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
         cod[l] = '\0';
     }
     i++;
-     //Para que no se rompa
+    //Para que no se rompa
 
     pos = encuentramnemo(cod, mnemos, 24); //busco la posicion del mnemonico en el diccionario, si no encuentro devuelve -1
     //Agrego codigo instruccion
@@ -84,7 +97,7 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
             }
             A[j] = '\0';
             (*inst).topA = -1;
-            tipoOperando(A, &(*inst).topA, &(*inst).vopA,rotulos);
+            tipoOperando(A, &(*inst).topA, &(*inst).vopA, *rotulos);
             j = 0;
             i++;
             while (cadena[i] != '\0')
@@ -95,29 +108,28 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
             }
             B[j] = '\0';
             (*inst).topB = -1;
-            tipoOperando(B, &(*inst).topB, &(*inst).vopB,rotulos);
-
+            tipoOperando(B, &(*inst).topB, &(*inst).vopB, *rotulos);
         }
         else
         {
-          if ((*inst).cod < 0xFF1) //1 operando
-          {
-            j=0;
-            while(cadena[i] != '\0'){
-              A[j] = cadena[i];
-              j++;
-              i++;
+            if ((*inst).cod < 0xFF1) //1 operando
+            {
+                j = 0;
+                while (cadena[i] != '\0')
+                {
+                    A[j] = cadena[i];
+                    j++;
+                    i++;
+                }
+                A[j] = '\0';
+                (*inst).topA = -1;
+                tipoOperando(A, &(*inst).topA, &(*inst).vopA, *rotulos);
             }
-            A[j] = '\0';
-            (*inst).topA=-1;
-            tipoOperando(A, &(*inst).topA, &(*inst).vopA,rotulos);
-
-          }
-          else
-          { //STOP
-              (*inst).topA = i;
-              (*inst).topB = 1;
-          }
+            else
+            { //STOP
+                (*inst).topA = i;
+                (*inst).topB = 1;
+            }
         }
     }
     else

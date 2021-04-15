@@ -93,7 +93,7 @@ int encuentramnemo(char mnem[], Tvec vec[], int max)
 }
 
 //tipo tiene que entrar con un valor
-void tipoOperando(char entrada[], int *tipo, int *operando,TvecRotulo rotulos)
+void tipoOperando(char entrada[], int *tipo, int *operando, TvecRotulo rotulos)
 {
   int i = 0, j = 0, pos;
   char base = '\0';
@@ -124,17 +124,21 @@ void tipoOperando(char entrada[], int *tipo, int *operando,TvecRotulo rotulos)
   }
   else
   {
-    if ((num[0]>='A' && num[0]<='Z') || (num[0]>='a' && num[0]<='z')){     //Posible rotulo
-      pos = buscarotulo(num,rotulos);
-      if (pos!=-1){   //encuentra rotulo
+    if ((num[0] >= 'A' && num[0] <= 'Z') || (num[0] >= 'a' && num[0] <= 'z'))
+    { //Posible rotulo
+      pos = buscarotulo(num, rotulos);
+      if (pos != -1)
+      { //encuentra rotulo
         *tipo = 0;
         *operando = rotulos.rot[pos].linea; //Carga la linea del rotulo, no se bien como esta implementada la estructura.
       }
-      else{
+      else
+      {
         //no encuentras rotulo
       }
     }
-    else{
+    else
+    {
       //Operando inmediato
       if (*tipo != 2)
         *tipo = 0;

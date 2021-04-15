@@ -30,6 +30,6 @@ typedef struct
 
 void creadicc(Tvec[]);
 int encuentramnemo(char[], Tvec[], int);
-void tipoOperando(char[], int *, int *);
+void tipoOperando(char[], int *, int *, TvecRotulo);
 int traduceInstruccion(instruccion);
 void agregaRotulo(TvecRotulo *, char[], int);
