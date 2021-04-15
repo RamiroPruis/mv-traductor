@@ -93,57 +93,66 @@ int encuentramnemo(char mnem[], Tvec vec[], int max)
 }
 
 //tipo tiene que entrar con un valor
-void tipoOperando(char entrada[], int* tipo, int* operando){
-  int i=0,j=0,pos;
-  char base='\0';
+void tipoOperando(char entrada[], int *tipo, int *operando)
+{
+  int i = 0, j = 0, pos;
+  char base = '\0';
   char num[6];
   Tvec reg[16];
 
   creaReg(reg);
 
-  if(entrada[i] == '['){              //Operando indirecto
+  if (entrada[i] == '[')
+  { //Operando indirecto
     i++;
     *tipo = 2;
-    do{
+    do
+    {
       num[j] = entrada[i];
       i++;
       j++;
-    }while(entrada[i]!=']');
-    num[j]='\0';
-  }else
-    strcpy(num,entrada);
-  pos = (*tipo!=2) ? encuentramnemo(num,reg,16):-1;
-  if(pos!=-1){                      //Operando registro
-      *tipo = 1;
-      *operando = reg[pos].hex;
+    } while (entrada[i] != ']');
+    num[j] = '\0';
   }
-  else{                             //Operando inmediato
-    if(*tipo!=2)
+  else
+    strcpy(num, entrada);
+  pos = (*tipo != 2) ? encuentramnemo(num, reg, 16) : -1;
+  if (pos != -1)
+  { //Operando registro
+    *tipo = 1;
+    *operando = reg[pos].hex;
+  }
+  else
+  { //Operando inmediato
+    if (*tipo != 2)
       *tipo = 0;
-    if(num[0]=='#' || num[0] == '@' || num[0] == '%' || num[0] =='`'){
-      base=num[0];
-      j=0;
-      while(num[j]!='\0'){
-        num[j]=num[j+1];
+    if (num[0] == '#' || num[0] == '@' || num[0] == '%' || num[0] == '`')
+    {
+      base = num[0];
+      j = 0;
+      while (num[j] != '\0')
+      {
+        num[j] = num[j + 1];
         j++;
       }
     }
-    switch (base){
-      case '#':
-        *operando = strtol(num,NULL,10);
-        break;
-      case '@':
-        *operando = strtol(num,NULL,8);
-        break;
-      case '%':
-        *operando = strtol(num,NULL,16);
-        break;
-      case '`':
-        *operando = num[0];
-        break;
-      default:
-        *operando = strtol(num,NULL,10);
-        break;
+    switch (base)
+    {
+    case '#':
+      *operando = strtol(num, NULL, 10);
+      break;
+    case '@':
+      *operando = strtol(num, NULL, 8);
+      break;
+    case '%':
+      *operando = strtol(num, NULL, 16);
+      break;
+    case '`':
+      *operando = num[0];
+      break;
+    default:
+      *operando = strtol(num, NULL, 10);
+      break;
     }
   }
 }
@@ -156,10 +165,10 @@ int traduceInstruccion(instruccion inst)
   if (inst.cod >= 0 && inst.cod <= 11)
     resultado = ((inst.cod << 28) & 0xF0000000) | ((inst.topA << 26) & 0x0C000000) | ((inst.topB << 24) & 0x03000000) | ((inst.vopA << 12) & 0x00FFF000) | (inst.vopB & 0x00000FFF);
   //Instruccion de un operando
-  else if (inst.cod >= 0 && inst.cod <= 11)
-    resultado = 0xF0000000 | ((inst.cod << 24) & 0x0F000000) | ((inst.topA << 22) & 0x00C00000) | (inst.vopA);
+  else if (inst.cod >= 240 && inst.cod <= 251)
+    resultado = ((inst.cod << 24) & 0xFF000000) | ((inst.topA << 22) & 0x00C00000) | (inst.vopA & 0x00000FFF);
   //Instrucciones sin operando
   else
-    resultado = 0xFF000000 | ((inst.cod << 20) & 0x00F00000);
-
-  return resultado;
+    resultado = (inst.cod << 20) & 0xFFF00000;
+  return 0;
+}
