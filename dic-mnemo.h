@@ -6,3 +6,4 @@ typedef struct{
 } Tvec;
 
 void creadicc(Tvec[]);
+int encuentramnemo(char [], Tvec []);
