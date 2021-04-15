@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "dic-mnemo.h"
+#define MAX 10
 
 void creadicc(Tvec vec[])
 {
@@ -188,4 +189,42 @@ int traduceInstruccion(instruccion inst)
   else
     resultado = (inst.cod << 20) & 0xFFF00000;
   return 0;
+}
+
+void cargaRotulos(char *vecLineas[], int n, TvecRotulo *rotulos)
+{
+  char cod[MAX];
+  Rotulo rotAux;
+  //Recorremos las lineas en busqueda de rotulos
+  for (int i = 0; i <= n; i++)
+  {
+    //Leemos hasta que el siguiente sea ':'
+    while (vecLineas[i] != ' ' && vecLineas[i] != ':')
+    {
+      cod[i] = vecLineas[i];
+      i++;
+    }
+    cod[i] = '\0';
+    //Caso rotulo
+    if (vecLineas[i] != ':')
+    {
+      //Vemos si el rotulo no existe
+      if (buscaRotulo(cod, *rotulos) == -1)
+      {
+        rotAux.linea = i;
+        strcpy(rotAux.nombre, cod);
+      }
+    }
+  }
+}
+
+int buscaRotulo(char cod[], TvecRotulo rotulos)
+{
+  int i = 0;
+  while (i <= rotulos.tope && strcmpi(cod, rotulos.rot[i].nombre))
+    i++;
+  if (i <= rotulos.tope)
+    return rotulos.rot[i].linea;
+  else
+    return -1;
 }

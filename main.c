@@ -15,7 +15,7 @@ int main()
     FILE *arch, *nombrearch; //¿NombreArch para que?
     char *filename;          //Viene por parametro del main
     int topeLineas = 0;
-    char vecLineas[100];
+    char *vecLineas[100];
 
     instruccion num;
     TvecRotulo rotulos;
@@ -28,7 +28,10 @@ int main()
         return 1;
     while (fgets(vecLineas[topeLineas], 256, arch) != NULL)
         topeLineas++;
+    topeLineas--;
     // FIN Lectura del archivo .asm
+
+    cargaRotulos(vecLineas, &rotulos);
 
     creadicc(Mnemonicos);
     strcpy(linea, "otro:LDL OTRO");
