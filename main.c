@@ -6,14 +6,14 @@
 
 void Desarma(char[], instruccion *, Tvec[], TvecRotulo *, int);
 
-int main()
+int main(int argc, char *argv[])
 {
     Tvec Mnemonicos[CANT];
     char linea[255];
 
     // Variables para :Lectura archivos
-    FILE *arch, *nombrearch; //¿NombreArch para que?
-    char *filename;          //Viene por parametro del main
+    FILE *arch;
+    int flag = 0;
     int topeLineas = 0;
     char *vecLineas[100];
 
@@ -23,10 +23,24 @@ int main()
     //Inicializaciones
     rotulos.tope = -1;
 
+    if (argc > 4)
+    {
+        printf("Error. Demasiados argumentos");
+        exit(1);
+    }
+    else if (argc < 3)
+    {
+        printf("Error. Pocos argumentos \n");
+        printf("Ejemplo: mvc.exe AsmFilename.asm BinFilename.bin [-o]");
+        exit(1);
+        else if (argc == 4 && *argv[3] == "-o")
+            flag = 1; //Omite la salida por pantalla de la traduccion.
+    }
+
     // COMIENZA Lectura del archivo .asm
-    if (arch = fopen(filename, "r") == NULL)
+    /*if (arch = fopen(argv[1], "r") == NULL)
         return 1;
-    while (fgets(vecLineas[topeLineas], 256, arch) != NULL)
+    while (fgets(*vecLineas[topeLineas], 256, arch) != NULL){
         topeLineas++;
     topeLineas--;
     // FIN Lectura del archivo .asm
