@@ -13,24 +13,26 @@ typedef struct{
 } instruccion;
 
 
+void Desarma(char[],instruccion*,Tvec[]);
+
 int main()
 {
     Tvec Mnemonicos[CANT];
     char linea[255];
     char a[4]="A1";
     int i = strtol(a,NULL,16);
-
     FILE *arch,*nombrearch;
     instruccion num;
+
     creadicc(Mnemonicos);
-    strcpy(linea,"STOP ");
-    //Desarma(linea,num,Mnemonicos);
+    strcpy(linea,"SHR [%A4],@2;");
+    Desarma(linea,&num,Mnemonicos);
     /*if (arch=fopen(nombrearch,"r")==NULL) return 1;
     while (fgets(linea,sizeof(linea),nombrearch)!=NULL){
         Desarma(linea,num,mnemos);
     }
     */
-    printf("%d",i);
+    printf("%02X %d %d %d %d",num.cod,num.topA,num.topB,num.vopA,num.vopB);
 
 
 
@@ -56,22 +58,35 @@ void Desarma(char cadena[],instruccion* inst,Tvec mnemos[]){
     cod[i]=cadena[i];
     i++;
   }
+  cod[i]='\0';
   i++;
   pos = encuentramnemo(cod,mnemos,24);  //busco la posicion del mnemonico en el diccionario, si no encuentro devuelve -1
   //Agrego codigo instruccion
   if (pos!=-1){
     (*inst).cod = mnemos[pos].hex;
-    if (inst.cod < 11){ //2 operandos
-        printf("%02X",inst.cod);
+    if ((*inst).cod < 0xF){ //2 operandos
         while(cadena[i] != ','){
           A[j]=cadena[i];
+          j++;
           i++;
         }
-        tipoOperando(A,inst.topA,inst.vopA);
+        A[j]='\0';
+        (*inst).topA=-1;
+        tipoOperando(A,&(*inst).topA,&(*inst).vopA);
+        j=0;
+        i++;
+        while(cadena[i] != ';'){
+          B[j]=cadena[i];
+          j++;
+          i++;
+        }
+        B[j]='\0';
+        (*inst).topB=-1;
+        tipoOperando(B,&(*inst).topB,&(*inst).vopB);
 
     }
     else{
-        if ((*inst).cod<23) //1 operando
+        if ((*inst).cod< 0xFF) //1 operando
         {
 
         }
@@ -82,7 +97,7 @@ void Desarma(char cadena[],instruccion* inst,Tvec mnemos[]){
     }
   }
   else
-    printf("Error");
+    printf("Error\n");
 }
 
 

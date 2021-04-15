@@ -95,7 +95,6 @@ void tipoOperando(char entrada[], int* tipo, int* operando){
   int i=0,j=0,pos;
   char base='\0';
   char num[6];
-  int op;
   Tvec reg[16];
 
   creaReg(reg);
@@ -104,9 +103,11 @@ void tipoOperando(char entrada[], int* tipo, int* operando){
     i++;
     *tipo = 2;
     do{
-      num[i] = entrada[i];
+      num[j] = entrada[i];
       i++;
+      j++;
     }while(entrada[i]!=']');
+    num[j]='\0';
   }else
     strcpy(num,entrada);
   pos = (*tipo!=2) ? encuentramnemo(num,reg,16):-1;
@@ -119,6 +120,7 @@ void tipoOperando(char entrada[], int* tipo, int* operando){
       *tipo = 0;
     if(num[0]=='#' || num[0] == '@' || num[0] == '%' || num[0] =='‘'){
       base=num[0];
+      j=0;
       while(num[j]!='\0'){
         num[j]=num[j+1];
         j++;
@@ -126,7 +128,7 @@ void tipoOperando(char entrada[], int* tipo, int* operando){
     }
     switch (base){
       case '#':
-        *operando= strtol(num,NULL,10);
+        *operando = strtol(num,NULL,10);
         break;
       case '@':
         *operando = strtol(num,NULL,8);
@@ -139,6 +141,7 @@ void tipoOperando(char entrada[], int* tipo, int* operando){
         break;
       default:
         *operando = strtol(num,NULL,10);
+        break;
     }
   }
 }
