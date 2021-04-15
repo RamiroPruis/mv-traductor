@@ -93,7 +93,7 @@ int encuentramnemo(char mnem[], Tvec vec[], int max)
 }
 
 //tipo tiene que entrar con un valor
-void tipoOperando(char entrada[], int *tipo, int *operando)
+void tipoOperando(char entrada[], int *tipo, int *operando,TvecRotulo rotulos)
 {
   int i = 0, j = 0, pos;
   char base = '\0';
@@ -123,36 +123,49 @@ void tipoOperando(char entrada[], int *tipo, int *operando)
     *operando = reg[pos].hex;
   }
   else
-  { //Operando inmediato
-    if (*tipo != 2)
-      *tipo = 0;
-    if (num[0] == '#' || num[0] == '@' || num[0] == '%' || num[0] == '`')
-    {
-      base = num[0];
-      j = 0;
-      while (num[j] != '\0')
-      {
-        num[j] = num[j + 1];
-        j++;
+  {
+    if ((num[0]>='A' && num[0]<='Z') || (num[0]>='a' && num[0]<='z')){     //Posible rotulo
+      pos = buscarotulo(num,rotulos);
+      if (pos!=-1){   //encuentra rotulo
+        *tipo = 0;
+        *operando = rotulos.rot[pos].linea; //Carga la linea del rotulo, no se bien como esta implementada la estructura.
+      }
+      else{
+        //no encuentras rotulo
       }
     }
-    switch (base)
-    {
-    case '#':
-      *operando = strtol(num, NULL, 10);
-      break;
-    case '@':
-      *operando = strtol(num, NULL, 8);
-      break;
-    case '%':
-      *operando = strtol(num, NULL, 16);
-      break;
-    case '`':
-      *operando = num[0];
-      break;
-    default:
-      *operando = strtol(num, NULL, 10);
-      break;
+    else{
+      //Operando inmediato
+      if (*tipo != 2)
+        *tipo = 0;
+      if (num[0] == '#' || num[0] == '@' || num[0] == '%' || num[0] == '`')
+      {
+        base = num[0];
+        j = 0;
+        while (num[j] != '\0')
+        {
+          num[j] = num[j + 1];
+          j++;
+        }
+      }
+      switch (base)
+      {
+      case '#':
+        *operando = strtol(num, NULL, 10);
+        break;
+      case '@':
+        *operando = strtol(num, NULL, 8);
+        break;
+      case '%':
+        *operando = strtol(num, NULL, 16);
+        break;
+      case '`':
+        *operando = num[0];
+        break;
+      default:
+        *operando = strtol(num, NULL, 10);
+        break;
+      }
     }
   }
 }
