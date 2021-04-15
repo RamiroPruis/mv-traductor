@@ -1,11 +1,26 @@
 #define CANT 32
 
-typedef struct{
+typedef struct
+{
   char mnemo[10];
   int hex;
 } Tvec;
 
-typedef struct{
+typedef struct
+{
+  char nombre[10];
+  int linea;
+} Rotulo;
+
+typedef struct
+{
+  Rotulo rot[100];
+  int tope;
+
+} TvecRotulo;
+
+typedef struct
+{
   int cod;  //codigo instruccion
   int topA; //tipo operando A
   int topB; //tipo operando B
@@ -14,6 +29,7 @@ typedef struct{
 } instruccion;
 
 void creadicc(Tvec[]);
-int encuentramnemo(char [], Tvec [],int);
-void tipoOperando(char[], int*, int*);
+int encuentramnemo(char[], Tvec[], int);
+void tipoOperando(char[], int *, int *);
 int traduceInstruccion(instruccion);
+void agregaRotulo(TvecRotulo *, char[], int);
