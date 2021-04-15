@@ -58,31 +58,31 @@ void creadicc(Tvec vec[])
 }
 
 void creaReg(Tvec registros[]){
-  strcpy(registros[0].mnemo,'DS');
+  strcpy(registros[0].mnemo,"DS");
   registros[0].hex=0;
-  strcpy(registros[5].mnemo,'IP');
+  strcpy(registros[5].mnemo,"IP");
   registros[5].hex=5;
-  strcpy(registros[8].mnemo,'CC');
+  strcpy(registros[8].mnemo,"CC");
   registros[8].hex=8;
-  strcpy(registros[9].mnemo,'AC');
+  strcpy(registros[9].mnemo,"AC");
   registros[9].hex=9;
-  strcpy(registros[10].mnemo,'AX');
+  strcpy(registros[10].mnemo,"AX");
   registros[10].hex=10;
-  strcpy(registros[11].mnemo,'BX');
+  strcpy(registros[11].mnemo,"BX");
   registros[11].hex=11;
-  strcpy(registros[12].mnemo,'CX');
+  strcpy(registros[12].mnemo,"CX");
   registros[12].hex=12;
-  strcpy(registros[13].mnemo,'DX');
+  strcpy(registros[13].mnemo,"DX");
   registros[13].hex=13;
-  strcpy(registros[14].mnemo,'EX');
+  strcpy(registros[14].mnemo,"EX");
   registros[14].hex=14;
-  strcpy(registros[15].mnemo,'FX');
+  strcpy(registros[15].mnemo,"FX");
   registros[15].hex=15;
 }
 
 int encuentramnemo(char mnem[], Tvec vec[],int max){
    int i=0;
-   while (i<=max && strcmpi(strupr(mnem),vec[i].mnemo)!=0)
+   while (i<=max && strcmpi(mnem,vec[i].mnemo)!=0)
         i++;
    if (i<=max)
         return i;
@@ -90,32 +90,55 @@ int encuentramnemo(char mnem[], Tvec vec[],int max){
         return -1;
 }
 
-void tipoOperando(char entrada, int* tipo, int* operando){
-  int i=0,pos;
-  char base='',abre[2];
+//tipo tiene que entrar con un valor
+void tipoOperando(char entrada[], int* tipo, int* operando){
+  int i=0,j=0,pos;
+  char base='\0';
   char num[6];
+  int op;
   Tvec reg[16];
 
   creaReg(reg);
 
-  if(entrada[i]=='[')
+  if(entrada[i] == '['){              //Operando indirecto
     i++;
     *tipo = 2;
     do{
       num[i] = entrada[i];
       i++;
     }while(entrada[i]!=']');
-  else
+  }else
     strcpy(num,entrada);
-
-  if(*tipo!=2){
-    pos=encuentramnemo(reg,num,16);
-    if(pos!=-1){
+  pos = (*tipo!=2) ? encuentramnemo(num,reg,16):-1;
+  if(pos!=-1){                      //Operando registro
       *tipo = 1;
-    }
-    else
-      *tipo = 0;
+      *operando = reg[pos].hex;
   }
-
-
+  else{                             //Operando inmediato
+    if(*tipo!=2)
+      *tipo = 0;
+    if(num[0]=='#' || num[0] == '@' || num[0] == '%' || num[0] =='‘'){
+      base=num[0];
+      while(num[j]!='\0'){
+        num[j]=num[j+1];
+        j++;
+      }
+    }
+    switch (base){
+      case '#':
+        *operando= strtol(num,NULL,10);
+        break;
+      case '@':
+        *operando = strtol(num,NULL,8);
+        break;
+      case '%':
+        *operando = strtol(num,NULL,16);
+        break;
+      case '‘':
+        *operando = num[1];
+        break;
+      default:
+        *operando = strtol(num,NULL,10);
+    }
+  }
 }

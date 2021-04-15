@@ -7,4 +7,4 @@ typedef struct{
 
 void creadicc(Tvec[]);
 int encuentramnemo(char [], Tvec [],int);
-void tipoOperando(char, int*, int*);
+void tipoOperando(char[], int*, int*);
