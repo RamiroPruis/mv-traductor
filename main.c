@@ -45,22 +45,27 @@ void Desarma(char cadena[],instruccion inst,Tvec mnemos[]){
   char cod[MAX];
   char A[MAX];
   char B[MAX];
-  char c = cadena[0];
-  int i=0,pos;
+  int i=0,j=0,k=0,pos;
 
   while(cadena[i] != ' '){
     cod[i]=cadena[i];
     i++;
   }
-  pos = encuentramnemo(cod,mnemos);  //busco la posicion del mnemonico en el diccionario, si no encuentro devuelve -1
+  i++;
+  pos = encuentramnemo(cod,mnemos,24);  //busco la posicion del mnemonico en el diccionario, si no encuentro devuelve -1
   //Agrego codigo instruccion
   if (pos!=-1){
     inst.cod = mnemos[pos].hex;
-    if (inst.cod < 11){//2 operandos
+    if (inst.cod < 11){ //2 operandos
         printf("%02X",inst.cod);
+        while(cadena[i] != ','){
+          A[j]=cadena[i];
+          i++;
+        }
+
     }
     else{
-        if (inst.cod<23)//1 operando
+        if (inst.cod<23) //1 operando
         {
 
         }
@@ -73,6 +78,8 @@ void Desarma(char cadena[],instruccion inst,Tvec mnemos[]){
   else
     printf("Error");
 }
+
+
 
 
 

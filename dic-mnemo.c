@@ -5,7 +5,6 @@
 
 void creadicc(Tvec vec[])
 {
-  //asdasdasd
   strcpy(vec[0].mnemo, "MOV");
   vec[0].hex = 0x00;
   strcpy(vec[1].mnemo, "ADD");
@@ -58,12 +57,65 @@ void creadicc(Tvec vec[])
   vec[24].hex = 0xFF1;
 }
 
-int encuentramnemo(char mnem[], Tvec vec[]){
+void creaReg(Tvec registros[]){
+  strcpy(registros[0].mnemo,'DS');
+  registros[0].hex=0;
+  strcpy(registros[5].mnemo,'IP');
+  registros[5].hex=5;
+  strcpy(registros[8].mnemo,'CC');
+  registros[8].hex=8;
+  strcpy(registros[9].mnemo,'AC');
+  registros[9].hex=9;
+  strcpy(registros[10].mnemo,'AX');
+  registros[10].hex=10;
+  strcpy(registros[11].mnemo,'BX');
+  registros[11].hex=11;
+  strcpy(registros[12].mnemo,'CX');
+  registros[12].hex=12;
+  strcpy(registros[13].mnemo,'DX');
+  registros[13].hex=13;
+  strcpy(registros[14].mnemo,'EX');
+  registros[14].hex=14;
+  strcpy(registros[15].mnemo,'FX');
+  registros[15].hex=15;
+}
+
+int encuentramnemo(char mnem[], Tvec vec[],int max){
    int i=0;
-   while (i<=24 && strcmp(strupr(mnem),vec[i].mnemo)!=0)
+   while (i<=max && strcmpi(strupr(mnem),vec[i].mnemo)!=0)
         i++;
-   if (i<=24)
+   if (i<=max)
         return i;
    else
         return -1;
+}
+
+void tipoOperando(char entrada, int* tipo, int* operando){
+  int i=0,pos;
+  char base='',abre[2];
+  char num[6];
+  Tvec reg[16];
+
+  creaReg(reg);
+
+  if(entrada[i]=='[')
+    i++;
+    *tipo = 2;
+    do{
+      num[i] = entrada[i];
+      i++;
+    }while(entrada[i]!=']');
+  else
+    strcpy(num,entrada);
+
+  if(*tipo!=2){
+    pos=encuentramnemo(reg,num,16);
+    if(pos!=-1){
+      *tipo = 1;
+    }
+    else
+      *tipo = 0;
+  }
+
+
 }
