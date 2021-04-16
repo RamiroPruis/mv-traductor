@@ -43,12 +43,10 @@ int main(int argc, char *argv[])
     if ((arch = fopen("holaquetal.txt", "r")) == NULL)
         return 1;
     while (fgets(vecLineas[topeLineas].cadena, 256, arch) != NULL)
-    {
-        vecLineas[topeLineas].cadena[strlen(vecLineas[topeLineas].cadena) - 1] = '\0';
         topeLineas++;
-    }
-
     topeLineas--;
+    for (int i = 0; i < topeLineas; i++)
+        vecLineas[i].cadena[strlen(vecLineas[i].cadena) - 1] = '\0';
     fclose(arch);
     // FIN Lectura del archivo .asm
 
