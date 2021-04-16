@@ -254,12 +254,15 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
     char B[MAX];
     int i = 0, j = 0, k = 0, l = 0, pos;
 
+    comeBasura(cadena, &i);
     while (cadena[i] != ' ' && cadena[i] != ':')
     {
-        cod[i] = cadena[i];
+        cod[j] = cadena[i];
         i++;
+        j++;
     }
-    cod[i] = '\0';
+    cod[j] = '\0';
+    j = 0;
     //Caso con rotulo
     if (cadena[i] == ':')
     {
@@ -268,6 +271,7 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
         //Debe de seguir leyendo hasta encontrar un mnemonico
         i++; //Como estabamos parados en ':' ahora avanza al siguiente caracter
         l = 0;
+        comeBasura(cadena, &i);
         while (cadena[i] != ' ' && cadena[i] != '\0')
         {
             cod[l] = cadena[i];
@@ -286,23 +290,28 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
         (*inst).cod = mnemos[pos].hex;
         if ((*inst).cod < 0xF0)
         { //2 operandos
-
+            comeBasura(cadena, &i);
             while (cadena[i] != ',')
             {
+                comeBasura(cadena, &i);
                 A[j] = cadena[i];
                 j++;
                 i++;
+                comeBasura(cadena, &i);
             }
             A[j] = '\0';
             (*inst).topA = -1;
             tipoOperando(A, &(*inst).topA, &(*inst).vopA, *rotulos);
             j = 0;
             i++;
+            comeBasura(cadena, &i);
             while (cadena[i] != '\0')
             {
+                comeBasura(cadena, &i);
                 B[j] = cadena[i];
                 j++;
                 i++;
+                comeBasura(cadena, &i);
             }
             B[j] = '\0';
             (*inst).topB = -1;
@@ -313,11 +322,14 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
             if ((*inst).cod < 0xFF1) //1 operando
             {
                 j = 0;
+                comeBasura(cadena, &i);
                 while (cadena[i] != '\0')
                 {
+                    comeBasura(cadena, &i);
                     A[j] = cadena[i];
                     j++;
                     i++;
+                    comeBasura(cadena, &i);
                 }
                 A[j] = '\0';
                 (*inst).topA = -1;
@@ -332,4 +344,9 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
     }
     else
         printf("Error\n");
+}
+void comeBasura(char cad[], int *i)
+{
+    while (cad[*i] == ' ')
+        *i = *i + 1;
 }
