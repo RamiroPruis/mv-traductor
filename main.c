@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "dic-mnemo.h"
 #define MAX 10
-
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
     TvecCadenas vecLineas[2000];
 
     int i = 0;
+    int n;
     instruccion num;
     TvecRotulo rotulos;
 
@@ -54,6 +55,9 @@ int main(int argc, char *argv[])
     do
     {
         Desarma(vecLineas[i].cadena, &num, Mnemonicos, &rotulos, i);
+        i++;
+        n = traduceInstruccion(num);
+        printf("%02X %02X %02X %02X \n", (n >> 24) & 0xFF, (n >> 16) & 0xFF, (n >> 8) & 0xFF, (n >> 0) & 0xFF);
     } while (i <= topeLineas);
 
     //Ciclo desarmado

@@ -192,7 +192,7 @@ int traduceInstruccion(instruccion inst)
     //Instrucciones sin operando
     else
         resultado = (inst.cod << 20) & 0xFFF00000;
-    return 0;
+    return resultado;
 }
 
 void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
