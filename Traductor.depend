@@ -27,19 +27,19 @@
 	"dic-mnemo.h"
 	<string.h>
 
-1618535819 source:e:\datos\escritorio\mv-traductor\dic-mnemo.c
-	<stdlib.h>
+1618581643 source:e:\datos\escritorio\mv-traductor\dic-mnemo.c
 	<stdio.h>
+	<stdlib.h>
 	<string.h>
 	"dic-mnemo.h"
 
-1618533711 e:\datos\escritorio\mv-traductor\dic-mnemo.h
+1618581465 e:\datos\escritorio\mv-traductor\dic-mnemo.h
 
-1618534440 source:e:\datos\escritorio\mv-traductor\main.c
+1618581466 source:e:\datos\escritorio\mv-traductor\main.c
 	<stdio.h>
 	<stdlib.h>
-	"dic-mnemo.h"
 	<string.h>
+	"dic-mnemo.h"
 
 1618516294 source:e:\users\ramiro\documents\facultad\3ro\arqui\maquina virtual\mv-traductor\dic-mnemo.c
 	<stdlib.h>
