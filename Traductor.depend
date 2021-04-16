@@ -27,15 +27,15 @@
 	"dic-mnemo.h"
 	<string.h>
 
-1618510087 source:e:\datos\escritorio\mv-traductor\dic-mnemo.c
+1618535819 source:e:\datos\escritorio\mv-traductor\dic-mnemo.c
 	<stdlib.h>
 	<stdio.h>
 	<string.h>
 	"dic-mnemo.h"
 
-1618510087 e:\datos\escritorio\mv-traductor\dic-mnemo.h
+1618533711 e:\datos\escritorio\mv-traductor\dic-mnemo.h
 
-1618511427 source:e:\datos\escritorio\mv-traductor\main.c
+1618534440 source:e:\datos\escritorio\mv-traductor\main.c
 	<stdio.h>
 	<stdlib.h>
 	"dic-mnemo.h"
