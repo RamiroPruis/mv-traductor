@@ -60,6 +60,10 @@ void creadicc(Tvec vec[])
 
 void creaReg(Tvec registros[])
 {
+    //Inicializamos en null
+    for (int i = 0; i < 16; i++)
+        strcpy(registros[i].mnemo, "\0");
+
     strcpy(registros[0].mnemo, "DS");
     registros[0].hex = 0;
     strcpy(registros[5].mnemo, "IP");
@@ -259,10 +263,8 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
     //Caso con rotulo
     if (cadena[i] == ':')
     {
-        (*rotulos).tope += 1;
-        agregaRotulo(rotulos, cod, nroLinea);
-        strcpy(cod, ""); //Ponemos en cero nuevamente el cod
 
+        strcpy(cod, ""); //Ponemos en cero nuevamente el cod
         //Debe de seguir leyendo hasta encontrar un mnemonico
         i++; //Como estabamos parados en ':' ahora avanza al siguiente caracter
         l = 0;
@@ -296,7 +298,7 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
             tipoOperando(A, &(*inst).topA, &(*inst).vopA, *rotulos);
             j = 0;
             i++;
-            while (cadena[i] != '\0')
+            while (cadena[i] != '\n')
             {
                 B[j] = cadena[i];
                 j++;

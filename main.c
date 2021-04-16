@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "dic-mnemo.h"
 #define MAX 10
+
 
 int main(int argc, char *argv[])
 {
@@ -15,11 +15,13 @@ int main(int argc, char *argv[])
     int topeLineas = 0;
     TvecCadenas vecLineas[2000];
 
+    int i = 0;
     instruccion num;
     TvecRotulo rotulos;
 
     //Inicializaciones
     rotulos.tope = -1;
+    creadicc(Mnemonicos);
 
     // if (argc > 4)
     // {
@@ -46,6 +48,15 @@ int main(int argc, char *argv[])
     // FIN Lectura del archivo .asm
 
     cargaRotulos(vecLineas, topeLineas, &rotulos);
+
+    //Ciclo desarmado
+
+    do
+    {
+        Desarma(vecLineas[i].cadena, &num, Mnemonicos, &rotulos, i);
+    } while (i <= topeLineas);
+
+    //Ciclo desarmado
 
     /*creadicc(Mnemonicos);
     strcpy(linea, "otro:LDL OTRO");
