@@ -43,7 +43,11 @@ int main(int argc, char *argv[])
     if ((arch = fopen("holaquetal.txt", "r")) == NULL)
         return 1;
     while (fgets(vecLineas[topeLineas].cadena, 256, arch) != NULL)
+    {
+        vecLineas[topeLineas].cadena[strlen(vecLineas[topeLineas].cadena) - 1] = '\0';
         topeLineas++;
+    }
+
     topeLineas--;
     fclose(arch);
     // FIN Lectura del archivo .asm
@@ -70,7 +74,6 @@ int main(int argc, char *argv[])
         Desarma(linea,num,mnemos);
     }
     */
-    printf("%02X %d %d %d %d", num.cod, num.topA, num.topB, num.vopA, num.vopB);
 
     //num = (num.cod << 24) | (num.topA <<16) | (num.topB << 8) |  ;
     //printf("%02X",num.cod);

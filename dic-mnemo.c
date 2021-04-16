@@ -232,7 +232,7 @@ int buscaRotulo(char cod[], TvecRotulo rotulos)
     while (i <= rotulos.tope && strcmpi(cod, rotulos.rot[i].nombre))
         i++;
     if (i <= rotulos.tope)
-        return rotulos.rot[i].linea;
+        return i;
     else
         return -1;
 }
@@ -268,7 +268,7 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
         //Debe de seguir leyendo hasta encontrar un mnemonico
         i++; //Como estabamos parados en ':' ahora avanza al siguiente caracter
         l = 0;
-        while (cadena[i] != ' ')
+        while (cadena[i] != ' ' && cadena[i] != '\0')
         {
             cod[l] = cadena[i];
             i++;
@@ -284,7 +284,7 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
     if (pos != -1)
     {
         (*inst).cod = mnemos[pos].hex;
-        if ((*inst).cod <= 0xF0)
+        if ((*inst).cod < 0xF0)
         { //2 operandos
 
             while (cadena[i] != ',')
@@ -298,7 +298,7 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
             tipoOperando(A, &(*inst).topA, &(*inst).vopA, *rotulos);
             j = 0;
             i++;
-            while (cadena[i] != '\n')
+            while (cadena[i] != '\0')
             {
                 B[j] = cadena[i];
                 j++;
