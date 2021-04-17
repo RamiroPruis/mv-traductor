@@ -90,7 +90,7 @@ int encuentramnemo(char mnem[], Tvec vec[], int max)
     int i = 0;
     while (i <= max && strcmpi(mnem, vec[i].mnemo) != 0)
         i++;
-    if (i <= max)
+    if (i <= max && mnem[0] != '\0')
         return i;
     else
         return -1;
@@ -171,7 +171,10 @@ void tipoOperando(char entrada[], int *tipo, int *operando, TvecRotulo rotulos)
                 *operando = num[0];
                 break;
             default:
-                *operando = strtol(num, NULL, 10);
+                if (num[0] >= 48 && num[0] <= 57) //Si es un numero
+                    *operando = strtol(num, NULL, 10);
+                else
+                    *tipo = -1;
                 break;
             }
         }
@@ -248,7 +251,7 @@ void agregaRotulo(TvecRotulo *rotulos, char cod[], int linea)
     (*rotulos).rot[(*rotulos).tope] = rotAux; //Medio enroscado, pero hace que el tema rotulo quede todo en una sola estructora, charlar con los chicos
 }
 
-void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemos[], TvecRotulo *rotulos, int nroLinea) //Cambie esto
+void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemos[], TvecRotulo *rotulos, int nroLinea, int *traduce) //Cambie esto
 {
     char lineaentera[200];
     char cod[MAX] = "\0";
@@ -257,6 +260,8 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     int i = 0, j = 0, k = 0, l = 0, pos;
     (*LineaCodigo).comentario[0] = '\0';
 
+    //Inicializamos la instruccion toda en NULL(-1)
+    (*inst).cod = (*inst).topA = (*inst).topB = -1;
     comeBasura(cadena, &i);
     while (cadena[i] != ' ' && cadena[i] != ':')
     {
@@ -292,12 +297,14 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     //Agrego codigo instruccion
     if (pos != -1)
     {
+
         (*inst).cod = mnemos[pos].hex;
         strcpy((*LineaCodigo).mnemom, cod);
+
         if ((*inst).cod < 0xF0)
         { //2 operandos
             comeBasura(cadena, &i);
-            while (cadena[i] != ',')
+            while (cadena[i] != ',' && cadena[i] != '\0')
             {
                 A[j] = cadena[i];
                 j++;
@@ -320,6 +327,13 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
             elimEspacio(B);
             (*inst).topB = -1;
             tipoOperando(B, &(*inst).topB, &(*inst).vopB, *rotulos);
+            if ((*inst).topB != -1 && (*inst).topA != -1)
+                *traduce = 1;
+            else
+            {
+                printf("ERROR:\tNo existe la instruccion ingresada\n");
+                *traduce = 0;
+            }
         }
         else
         {
@@ -337,11 +351,23 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
                 elimEspacio(A);
                 (*inst).topA = -1;
                 tipoOperando(A, &(*inst).topA, &(*inst).vopA, *rotulos);
+                if ((*inst).topB == -1 && (*inst).topA != -1)
+                    *traduce = 1;
+                else
+                {
+                    printf("ERROR:\tNo existe la instruccion ingresada\n");
+                    *traduce = 0;
+                }
             }
             else
             { //STOP
-                (*inst).topA = i;
-                (*inst).topB = 1;
+                if ((*inst).topB == -1 && (*inst).topA == -1)
+                    *traduce = 1;
+                else
+                {
+                    printf("ERROR:\tNo existe la instruccion ingresada\n");
+                    *traduce = 0;
+                }
             }
         }
         if (cadena[i] != '\n')
@@ -361,7 +387,10 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
         strcpy((*LineaCodigo).op2, B);
     }
     else
+    {
+        *traduce = 0;
         printf("ERROR:\tNo existe la instruccion ingresada\n");
+    }
 }
 
 void comeBasura(char cad[], int *i)
