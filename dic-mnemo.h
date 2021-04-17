@@ -50,7 +50,11 @@ void tipoOperando(char[], int *, int *, TvecRotulo);
 int traduceInstruccion(instruccion);
 void agregaRotulo(TvecRotulo *, char[], int);
 void cargaRotulos(TvecCadenas[], int, TvecRotulo *);
+<<<<<<< HEAD
 void Desarma(char[], instruccion *,lineacod *, Tvec[], TvecRotulo *, int);
+=======
+void Desarma(char[], instruccion *, lineacod *, Tvec[], TvecRotulo *, int, int *);
+>>>>>>> d836e14bdabb04063fcebb7f490ab99d4bc457da
 int buscaRotulo(char[], TvecRotulo);
 void comeBasura(char[], int *);
 void elimEspacio(char[]);

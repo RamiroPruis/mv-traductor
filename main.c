@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
     lineacod LineaCodigo;
 
     int i = 0;
+    int traduce;
     int n;
     instruccion num;
     TvecRotulo rotulos;
@@ -58,9 +59,13 @@ int main(int argc, char *argv[])
 
     do
     {
-        Desarma(vecLineas[i].cadena, &num, &LineaCodigo, Mnemonicos, &rotulos, i);
+
+        Desarma(vecLineas[i].cadena, &num, &LineaCodigo, Mnemonicos, &rotulos, i, &traduce);
         i++;
-        n = traduceInstruccion(num);
+        if (traduce)
+            n = traduceInstruccion(num);
+        else
+            n = -1; //FF FF FF FF
         printf("[%04d]: %02X %02X %02X %02X", i, (n >> 24) & 0xFF, (n >> 16) & 0xFF, (n >> 8) & 0xFF, (n >> 0) & 0xFF);
         printf("%10s %2s %5s %s %15s \n", LineaCodigo.cod, strupr(LineaCodigo.mnemom), strupr(LineaCodigo.op1), strupr(LineaCodigo.op2), LineaCodigo.comentario);
     } while (i <= topeLineas);
