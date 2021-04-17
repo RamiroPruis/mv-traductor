@@ -13,19 +13,19 @@
 
 1618502058 e:\users\ramiro\documents\facultad\3ro\arqui\maquina virtual\traductor\dic-mnemo.h
 
-1618446597 source:c:\users\maria\desktop\facu\arquitectura de computadoras\mv\mv-traductor\dic-mnemo.c
-	<stdlib.h>
+1618673319 source:c:\users\maria\desktop\facu\arquitectura de computadoras\mv\mv-traductor\dic-mnemo.c
 	<stdio.h>
+	<stdlib.h>
 	<string.h>
 	"dic-mnemo.h"
 
-1618446600 c:\users\maria\desktop\facu\arquitectura de computadoras\mv\mv-traductor\dic-mnemo.h
+1618670886 c:\users\maria\desktop\facu\arquitectura de computadoras\mv\mv-traductor\dic-mnemo.h
 
-1618446906 source:c:\users\maria\desktop\facu\arquitectura de computadoras\mv\mv-traductor\main.c
+1618673319 source:c:\users\maria\desktop\facu\arquitectura de computadoras\mv\mv-traductor\main.c
 	<stdio.h>
 	<stdlib.h>
-	"dic-mnemo.h"
 	<string.h>
+	"dic-mnemo.h"
 
 1618602467 source:e:\datos\escritorio\mv-traductor\dic-mnemo.c
 	<stdio.h>

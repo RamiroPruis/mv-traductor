@@ -214,6 +214,7 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
         }
         cod[j] = '\0';
         //Caso rotulo
+        /*
         if (cadenaActual[j] == ':')
         {
             //Vemos si el rotulo no existe
@@ -223,6 +224,7 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
                 agregaRotulo(rotulos, cod, i);
             }
         }
+        */
     }
 }
 
@@ -254,6 +256,7 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
     char B[MAX];
     int i = 0, j = 0, k = 0, l = 0, pos;
 
+    (*inst).comentario[0]="\0";
     comeBasura(cadena, &i);
     while (cadena[i] != ' ' && cadena[i] != ':')
     {
@@ -266,7 +269,6 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
     //Caso con rotulo
     if (cadena[i] == ':')
     {
-
         strcpy(cod, ""); //Ponemos en cero nuevamente el cod
         //Debe de seguir leyendo hasta encontrar un mnemonico
         i++; //Como estabamos parados en ':' ahora avanza al siguiente caracter
@@ -305,7 +307,7 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
             j = 0;
             i++;
             comeBasura(cadena, &i);
-            while (cadena[i] != '\0')
+            while (cadena[i] != '\0' && cadena[i]!=';')
             {
                 comeBasura(cadena, &i);
                 B[j] = cadena[i];
@@ -341,10 +343,21 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
                 (*inst).topB = 1;
             }
         }
+       if (cadena[i]!='\n'){ //no cambia de linea, entonces tengo un comentario u otra instruccion;
+           if (cadena[i]==';'){
+                j=0;
+                while (cadena[i]!='\n' && cadena[i]!='\0'){
+                    (*inst).comentario[j]=cadena[i];
+                    i++;
+                    j++;
+                }
+           }
+        }
     }
     else
         printf("Error\n");
 }
+
 void comeBasura(char cad[], int *i)
 {
     while (cad[*i] == ' ')

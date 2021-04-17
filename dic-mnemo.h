@@ -31,6 +31,7 @@ typedef struct
     int topB; //tipo operando B
     int vopA; //valor operando A
     int vopB; //valor operando B
+    char comentario[100];
 } instruccion;
 
 void creadicc(Tvec[]);

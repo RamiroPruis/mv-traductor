@@ -59,7 +59,8 @@ int main(int argc, char *argv[])
         Desarma(vecLineas[i].cadena, &num, Mnemonicos, &rotulos, i);
         i++;
         n = traduceInstruccion(num);
-        printf("%02X %02X %02X %02X \n", (n >> 24) & 0xFF, (n >> 16) & 0xFF, (n >> 8) & 0xFF, (n >> 0) & 0xFF);
+        printf("[%04d]: %02X %02X %02X %02X",i,(n >> 24) & 0xFF, (n >> 16) & 0xFF, (n >> 8) & 0xFF, (n >> 0) & 0xFF);
+        printf("%10d: %10s \n",rotulos.rot,vecLineas[i-1].cadena);
     } while (i <= topeLineas);
 
     //Ciclo desarmado
