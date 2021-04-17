@@ -27,31 +27,31 @@
 	<string.h>
 	"dic-mnemo.h"
 
-1618602467 source:e:\datos\escritorio\mv-traductor\dic-mnemo.c
+1618691124 source:e:\datos\escritorio\mv-traductor\dic-mnemo.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"dic-mnemo.h"
 
-1618602468 e:\datos\escritorio\mv-traductor\dic-mnemo.h
+1618690496 e:\datos\escritorio\mv-traductor\dic-mnemo.h
 
-1618584200 source:e:\datos\escritorio\mv-traductor\main.c
+1618690497 source:e:\datos\escritorio\mv-traductor\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"dic-mnemo.h"
 
-1618516294 source:e:\users\ramiro\documents\facultad\3ro\arqui\maquina virtual\mv-traductor\dic-mnemo.c
-	<stdlib.h>
+1618688141 source:e:\users\ramiro\documents\facultad\3ro\arqui\maquina virtual\mv-traductor\dic-mnemo.c
 	<stdio.h>
+	<stdlib.h>
 	<string.h>
 	"dic-mnemo.h"
 
-1618516294 e:\users\ramiro\documents\facultad\3ro\arqui\maquina virtual\mv-traductor\dic-mnemo.h
+1618686257 e:\users\ramiro\documents\facultad\3ro\arqui\maquina virtual\mv-traductor\dic-mnemo.h
 
-1618517813 source:e:\users\ramiro\documents\facultad\3ro\arqui\maquina virtual\mv-traductor\main.c
+1618687836 source:e:\users\ramiro\documents\facultad\3ro\arqui\maquina virtual\mv-traductor\main.c
 	<stdio.h>
 	<stdlib.h>
-	"dic-mnemo.h"
 	<string.h>
+	"dic-mnemo.h"
 
