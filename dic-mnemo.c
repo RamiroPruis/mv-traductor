@@ -248,18 +248,6 @@ void agregaRotulo(TvecRotulo *rotulos, char cod[], int linea)
     (*rotulos).rot[(*rotulos).tope] = rotAux; //Medio enroscado, pero hace que el tema rotulo quede todo en una sola estructora, charlar con los chicos
 }
 
-<<<<<<< HEAD
-// cadena[] = "ADD [5],10;";
-void Desarma(char cadena[], instruccion *inst,lineacod *LineaCodigo,Tvec mnemos[], TvecRotulo *rotulos, int nroLinea) //Cambie esto
-{
-    char lineaentera[200];
-    char cod[MAX]="\0";
-    char A[MAX]="\0";
-    char B[MAX]="\0";
-    int i = 0, j = 0, k = 0, l = 0, pos;
-    size_t len_my_str;
-    (*LineaCodigo).comentario[0]="\0";
-=======
 void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemos[], TvecRotulo *rotulos, int nroLinea) //Cambie esto
 {
     char lineaentera[200];
@@ -268,8 +256,6 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     char B[MAX] = "\0";
     int i = 0, j = 0, k = 0, l = 0, pos;
     (*LineaCodigo).comentario[0] = '\0';
->>>>>>> 8ecee5b46a7672dda64d5c9726bf8e72b7afe934
-
     comeBasura(cadena, &i);
     while (cadena[i] != ' ' && cadena[i] != ':')
     {
@@ -282,11 +268,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     //Caso con rotulo
     if (cadena[i] == ':')
     {
-<<<<<<< HEAD
-        strcpy((*LineaCodigo).cod,cod);
-=======
         strcpy((*LineaCodigo).cod, cod);
->>>>>>> 8ecee5b46a7672dda64d5c9726bf8e72b7afe934
         strcpy(cod, ""); //Ponemos en cero nuevamente el cod
         //Debe de seguir leyendo hasta encontrar un mnemonico
         i++; //Como estabamos parados en ':' ahora avanza al siguiente caracter
@@ -301,11 +283,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
         cod[l] = '\0';
     }
     else
-<<<<<<< HEAD
-        sprintf((*LineaCodigo).cod,"%d:",nroLinea);
-=======
         sprintf((*LineaCodigo).cod, "%d:", nroLinea);
->>>>>>> 8ecee5b46a7672dda64d5c9726bf8e72b7afe934
     i++;
     //Para que no se rompa
 
@@ -314,11 +292,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     if (pos != -1)
     {
         (*inst).cod = mnemos[pos].hex;
-<<<<<<< HEAD
-        strcpy((*LineaCodigo).mnemom,cod);
-=======
         strcpy((*LineaCodigo).mnemom, cod);
->>>>>>> 8ecee5b46a7672dda64d5c9726bf8e72b7afe934
         if ((*inst).cod < 0xF0)
         { //2 operandos
             comeBasura(cadena, &i);
@@ -332,6 +306,8 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
             elimEspacio(A);
             (*inst).topA = -1;
             tipoOperando(A, &(*inst).topA, &(*inst).vopA, *rotulos);
+            if ((*inst).vopA>4096)
+                (*inst).vopA<<4;
             j = 0;
             i++;
             comeBasura(cadena, &i);
@@ -369,13 +345,6 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
                 (*inst).topB = 1;
             }
         }
-<<<<<<< HEAD
-       if (cadena[i]!='\n'){ //no cambia de linea, entonces tengo un comentario u otra instruccion;
-           if (cadena[i]==';'){
-                j=0;
-                while (cadena[i]!='\n' && cadena[i]!='\0'){
-                    (*LineaCodigo).comentario[j]=cadena[i];
-=======
         if (cadena[i] != '\n')
         { //no cambia de linea, entonces tengo un comentario u otra instruccion;
             if (cadena[i] == ';')
@@ -384,19 +353,13 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
                 while (cadena[i] != '\n' && cadena[i] != '\0')
                 {
                     (*LineaCodigo).comentario[j] = cadena[i];
->>>>>>> 8ecee5b46a7672dda64d5c9726bf8e72b7afe934
                     i++;
                     j++;
                 }
             }
         }
-<<<<<<< HEAD
-        strcpy((*LineaCodigo).op1,A);
-        strcpy((*LineaCodigo).op2,B);
-=======
         strcpy((*LineaCodigo).op1, A);
         strcpy((*LineaCodigo).op2, B);
->>>>>>> 8ecee5b46a7672dda64d5c9726bf8e72b7afe934
     }
     else
         printf("ERROR:\tNo existe la instruccion ingresada\n");
