@@ -53,3 +53,4 @@ void cargaRotulos(TvecCadenas[], int, TvecRotulo *);
 void Desarma(char[], instruccion *,lineacod *, Tvec[], TvecRotulo *, int);
 int buscaRotulo(char[], TvecRotulo);
 void comeBasura(char[], int *);
+void elimEspacio(char[]);
