@@ -13,7 +13,9 @@ int main(int argc, char *argv[])
     FILE *arch;
     int flag = 0;
     int topeLineas = 0;
+
     TvecCadenas vecLineas[2000];
+    lineacod LineaCodigo;
 
     int i = 0;
     int n;
@@ -56,11 +58,12 @@ int main(int argc, char *argv[])
 
     do
     {
-        Desarma(vecLineas[i].cadena, &num, Mnemonicos, &rotulos, i);
+        Desarma(vecLineas[i].cadena, &num, &LineaCodigo,Mnemonicos, &rotulos, i);
         i++;
         n = traduceInstruccion(num);
         printf("[%04d]: %02X %02X %02X %02X",i,(n >> 24) & 0xFF, (n >> 16) & 0xFF, (n >> 8) & 0xFF, (n >> 0) & 0xFF);
-        printf("%10d: %10s \n",rotulos.rot,vecLineas[i-1].cadena);
+        printf("%10s %2s %5s %s %15s \n",LineaCodigo.cod,LineaCodigo.mnemom,LineaCodigo.op1,LineaCodigo.op2,LineaCodigo.comentario);
+
     } while (i <= topeLineas);
 
     //Ciclo desarmado

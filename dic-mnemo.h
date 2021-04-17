@@ -1,4 +1,5 @@
 #define CANT 32
+#define MAX 10
 
 typedef struct
 {
@@ -31,8 +32,17 @@ typedef struct
     int topB; //tipo operando B
     int vopA; //valor operando A
     int vopB; //valor operando B
-    char comentario[100];
 } instruccion;
+
+
+typedef struct
+{
+    char mnemom[MAX];
+    char cod[MAX];
+    char op1[MAX];
+    char op2[MAX];
+    char  comentario[100];
+} lineacod;
 
 void creadicc(Tvec[]);
 int encuentramnemo(char[], Tvec[], int);
@@ -40,6 +50,6 @@ void tipoOperando(char[], int *, int *, TvecRotulo);
 int traduceInstruccion(instruccion);
 void agregaRotulo(TvecRotulo *, char[], int);
 void cargaRotulos(TvecCadenas[], int, TvecRotulo *);
-void Desarma(char[], instruccion *, Tvec[], TvecRotulo *, int);
+void Desarma(char[], instruccion *,lineacod *, Tvec[], TvecRotulo *, int);
 int buscaRotulo(char[], TvecRotulo);
 void comeBasura(char[], int *);
