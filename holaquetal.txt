@@ -1,12 +1,12 @@
-            MOV [ 10   ] , 0   ;asdasdasd
-  mov [ 20 ], 1  
- otro:  cmp [20],100   
-jp   fin  
-swap [ 10 ],[  20 ]   
-add [20],  [  10  ]  
-mov   ax,   %001  
-mov cx, 1  
+        MOV [   10        ] , 0   ;asdasdasd
+    mov  [  20  ], 1
+ otro:      cmp [   20  ],100
+jp   fin
+swap [ 10 ],[  20 ]
+add [20],  [  10  ]
+mov   ax,   %001
+mov cx, 1
 mov dx, 10
    sys    2
-  jmp     otro
-fin:   stop   
+  jmp       otro
+    fin:   stop

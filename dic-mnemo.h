@@ -34,14 +34,13 @@ typedef struct
     int vopB; //valor operando B
 } instruccion;
 
-
 typedef struct
 {
     char mnemom[MAX];
     char cod[MAX];
     char op1[MAX];
     char op2[MAX];
-    char  comentario[100];
+    char comentario[100];
 } lineacod;
 
 void creadicc(Tvec[]);
@@ -50,7 +49,7 @@ void tipoOperando(char[], int *, int *, TvecRotulo);
 int traduceInstruccion(instruccion);
 void agregaRotulo(TvecRotulo *, char[], int);
 void cargaRotulos(TvecCadenas[], int, TvecRotulo *);
-void Desarma(char[], instruccion *,lineacod *, Tvec[], TvecRotulo *, int);
+void Desarma(char[], instruccion *, lineacod *, Tvec[], TvecRotulo *, int);
 int buscaRotulo(char[], TvecRotulo);
 void comeBasura(char[], int *);
 void elimEspacio(char[]);
