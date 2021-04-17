@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "dic-mnemo.h"
-#define MAX 10
 
 void creadicc(Tvec vec[])
 {
@@ -250,14 +249,16 @@ void agregaRotulo(TvecRotulo *rotulos, char cod[], int linea)
 }
 
 // cadena[] = "ADD [5],10;";
-void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulos, int nroLinea) //Cambie esto
+void Desarma(char cadena[], instruccion *inst,lineacod *LineaCodigo,Tvec mnemos[], TvecRotulo *rotulos, int nroLinea) //Cambie esto
 {
-    char cod[MAX];
-    char A[MAX];
-    char B[MAX];
+    char lineaentera[200];
+    char cod[MAX]="\0";
+    char A[MAX]="\0";
+    char B[MAX]="\0";
     int i = 0, j = 0, k = 0, l = 0, pos;
+    size_t len_my_str;
+    (*LineaCodigo).comentario[0]="\0";
 
-    (*inst).comentario[0] = "\0";
     comeBasura(cadena, &i);
     while (cadena[i] != ' ' && cadena[i] != ':')
     {
@@ -270,6 +271,7 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
     //Caso con rotulo
     if (cadena[i] == ':')
     {
+        strcpy((*LineaCodigo).cod,cod);
         strcpy(cod, ""); //Ponemos en cero nuevamente el cod
         //Debe de seguir leyendo hasta encontrar un mnemonico
         i++; //Como estabamos parados en ':' ahora avanza al siguiente caracter
@@ -283,6 +285,8 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
         }
         cod[l] = '\0';
     }
+    else
+        sprintf((*LineaCodigo).cod,"%d:",nroLinea);
     i++;
     //Para que no se rompa
 
@@ -291,6 +295,7 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
     if (pos != -1)
     {
         (*inst).cod = mnemos[pos].hex;
+        strcpy((*LineaCodigo).mnemom,cod);
         if ((*inst).cod < 0xF0)
         { //2 operandos
             comeBasura(cadena, &i);
@@ -308,7 +313,7 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
             j = 0;
             i++;
             comeBasura(cadena, &i);
-            while (cadena[i] != '\0' && cadena[i] != ';')
+            while (cadena[i] != '\0' && cadena[i]!=';')
             {
                 comeBasura(cadena, &i);
                 B[j] = cadena[i];
@@ -344,19 +349,18 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
                 (*inst).topB = 1;
             }
         }
-        if (cadena[i] != '\n')
-        { //no cambia de linea, entonces tengo un comentario u otra instruccion;
-            if (cadena[i] == ';')
-            {
-                j = 0;
-                while (cadena[i] != '\n' && cadena[i] != '\0')
-                {
-                    (*inst).comentario[j] = cadena[i];
+       if (cadena[i]!='\n'){ //no cambia de linea, entonces tengo un comentario u otra instruccion;
+           if (cadena[i]==';'){
+                j=0;
+                while (cadena[i]!='\n' && cadena[i]!='\0'){
+                    (*LineaCodigo).comentario[j]=cadena[i];
                     i++;
                     j++;
                 }
-            }
+           }
         }
+        strcpy((*LineaCodigo).op1,A);
+        strcpy((*LineaCodigo).op2,B);
     }
     else
         printf("Error\n");
