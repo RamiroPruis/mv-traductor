@@ -56,13 +56,14 @@ int main(int argc, char *argv[])
 
     //Ciclo desarmado
 
+
     do
     {
         Desarma(vecLineas[i].cadena, &num, &LineaCodigo,Mnemonicos, &rotulos, i);
         i++;
         n = traduceInstruccion(num);
         printf("[%04d]: %02X %02X %02X %02X",i,(n >> 24) & 0xFF, (n >> 16) & 0xFF, (n >> 8) & 0xFF, (n >> 0) & 0xFF);
-        printf("%10s %2s %5s %s %15s \n",LineaCodigo.cod,LineaCodigo.mnemom,LineaCodigo.op1,LineaCodigo.op2,LineaCodigo.comentario);
+        printf("%10s %2s %5s %s %15s \n",LineaCodigo.cod,strupr(LineaCodigo.mnemom),strupr(LineaCodigo.op1),strupr(LineaCodigo.op2),LineaCodigo.comentario);
 
     } while (i <= topeLineas);
 
