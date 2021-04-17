@@ -200,21 +200,23 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
     char cod[MAX];
     Rotulo rotAux;
     char cadenaActual[256];
-    int j;
+    int j, k;
     //Recorremos las lineas en busqueda de rotulos
     for (int i = 0; i <= n; i++)
     {
         //Leemos hasta que el siguiente sea ':'
         strcpy(cadenaActual, vec[i].cadena);
         j = 0;
+        k = 0;
+        comeBasura(cadenaActual, &j);
         while (cadenaActual[j] != ' ' && cadenaActual[j] != ':')
         {
-            cod[j] = cadenaActual[j];
+            cod[k] = cadenaActual[j];
             j++;
+            k++;
         }
-        cod[j] = '\0';
+        cod[k] = '\0';
         //Caso rotulo
-        /*
         if (cadenaActual[j] == ':')
         {
             //Vemos si el rotulo no existe
@@ -224,7 +226,6 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
                 agregaRotulo(rotulos, cod, i);
             }
         }
-        */
     }
 }
 
@@ -256,7 +257,7 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
     char B[MAX];
     int i = 0, j = 0, k = 0, l = 0, pos;
 
-    (*inst).comentario[0]="\0";
+    (*inst).comentario[0] = "\0";
     comeBasura(cadena, &i);
     while (cadena[i] != ' ' && cadena[i] != ':')
     {
@@ -307,7 +308,7 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
             j = 0;
             i++;
             comeBasura(cadena, &i);
-            while (cadena[i] != '\0' && cadena[i]!=';')
+            while (cadena[i] != '\0' && cadena[i] != ';')
             {
                 comeBasura(cadena, &i);
                 B[j] = cadena[i];
@@ -343,15 +344,18 @@ void Desarma(char cadena[], instruccion *inst, Tvec mnemos[], TvecRotulo *rotulo
                 (*inst).topB = 1;
             }
         }
-       if (cadena[i]!='\n'){ //no cambia de linea, entonces tengo un comentario u otra instruccion;
-           if (cadena[i]==';'){
-                j=0;
-                while (cadena[i]!='\n' && cadena[i]!='\0'){
-                    (*inst).comentario[j]=cadena[i];
+        if (cadena[i] != '\n')
+        { //no cambia de linea, entonces tengo un comentario u otra instruccion;
+            if (cadena[i] == ';')
+            {
+                j = 0;
+                while (cadena[i] != '\n' && cadena[i] != '\0')
+                {
+                    (*inst).comentario[j] = cadena[i];
                     i++;
                     j++;
                 }
-           }
+            }
         }
     }
     else
