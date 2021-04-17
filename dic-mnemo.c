@@ -341,6 +341,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
             {
                 j = 0;
                 comeBasura(cadena, &i);
+                //Leemos el primer operando
                 while (cadena[i] != '\0')
                 {
                     A[j] = cadena[i];
@@ -349,9 +350,17 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
                 }
                 A[j] = '\0';
                 elimEspacio(A);
-                (*inst).topA = -1;
                 tipoOperando(A, &(*inst).topA, &(*inst).vopA, *rotulos);
-                if ((*inst).topB == -1 && (*inst).topA != -1)
+                //Seguimos leyendo en busqueda de errores
+                comeBasura(cadena, &i);
+                j = 0;
+                while (cadena[i] != '\0' && B[0] == '\0')
+                {
+                    B[j] = cadena[i];
+                    j++;
+                    i++;
+                }
+                if ((*inst).topB == -1 && (*inst).topA != -1 && B[0] != '\0')
                     *traduce = 1;
                 else
                 {
@@ -361,7 +370,16 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
             }
             else
             { //STOP
-                if ((*inst).topB == -1 && (*inst).topA == -1)
+                //Seguimos leyendo en busqueda de errores
+                comeBasura(cadena, &i);
+                j = 0;
+                while (cadena[i] != '\0' && A[0] == '\0')
+                {
+                    A[j] = cadena[i];
+                    j++;
+                    i++;
+                }
+                if ((*inst).topB == -1 && (*inst).topA == -1 && A[0] == '\0')
                     *traduce = 1;
                 else
                 {
