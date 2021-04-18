@@ -261,7 +261,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     char A[MAX] = "\0";
     char B[MAX] = "\0";
     int i = 0, j = 0, k = 0, l = 0, pos;
-    (*LineaCodigo).comentario[0] = '\0';
+    strcpy((*LineaCodigo).comentario,"\0");
     //Inicializamos la instruccion toda en NULL(-1)
     (*inst).cod = (*inst).topA = (*inst).topB = -1;
     comeBasura(cadena, &i);
