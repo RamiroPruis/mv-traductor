@@ -138,7 +138,9 @@ void tipoOperando(char entrada[], int *tipo, int *operando, TvecRotulo rotulos)
             }
             else
             {
-                //no encuentras rotulo
+                printf("No se encuentra el rotulo\n");
+                *tipo = 0;
+                *operando = 0xFFF;
             }
         }
         else
