@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     FILE *arch;
     int flag = 0;
     int topeLineas = 0;
-
+    int vectorbinario[2000];
     TvecCadenas vecLineas[2000];
     lineacod LineaCodigo;
     char txt[25];
@@ -25,9 +25,8 @@ int main(int argc, char *argv[])
     //Inicializaciones
     rotulos.tope = -1;
     creadicc(Mnemonicos);
-
     /*
-     if (argc > 4)
+    if (argc > 4)
      {
          printf("Error. Demasiados argumentos");
          exit(1);
@@ -44,8 +43,7 @@ int main(int argc, char *argv[])
              flag = 1; //Omite la salida por pantalla de la traduccion.
          }
      }
-     */
-
+    */
     // COMIENZA Lectura del archivo .asm
     strcpy(txt, "fibo.asm");
     argv[1] = (char *)malloc(25);
@@ -67,9 +65,10 @@ int main(int argc, char *argv[])
     do
     {
         Desarma(vecLineas[i].cadena, &num, &LineaCodigo, Mnemonicos, &rotulos, i, &traduce);
-        i++;
-        if (traduce)
+        if (traduce){
             n = traduceInstruccion(num);
+            vectorbinario[i]=n;
+        }
         else
         {
             n = -1; //FF FF FF FF
@@ -80,22 +79,21 @@ int main(int argc, char *argv[])
             printf("[%04d]: %02X %02X %02X %02X", i, (n >> 24) & 0xFF, (n >> 16) & 0xFF, (n >> 8) & 0xFF, (n >> 0) & 0xFF);
             printf("%10s %4s %4s %6s %15s \n", LineaCodigo.cod, strupr(LineaCodigo.mnemom), strupr(LineaCodigo.op1), strupr(LineaCodigo.op2), LineaCodigo.comentario);
         }
+        i++;
     } while (i <= topeLineas);
 
     if (creaBin)
     {
+        i=0;
+        if ((arch = fopen(argv[2], "wb")) == NULL)
+            return 1;
+        while (i<=topeLineas){
+            fwrite(&(vectorbinario[i]),sizeof(int),1,arch);
+            i++;
+        }
+        fclose(arch);
+        printf("Archivo binario creado con exito. Traduccion exitosa");
     }
-
-    //Ciclo desarmado
-
-    /*creadicc(Mnemonicos);
-    strcpy(linea, "otro:LDL OTRO");
-    Desarma(linea, &num, Mnemonicos, &rotulos, 1); //Cambie esto
-    /*if (arch=fopen(nombrearch,"r")==NULL) return 1;
-    while (fgets(linea,sizeof(linea),nombrearch)!=NULL){
-        Desarma(linea,num,mnemos);
-    }
-    */
 
     return 0;
 }

@@ -97,7 +97,7 @@ int encuentramnemo(char mnem[], Tvec vec[], int max)
 }
 
 //tipo tiene que entrar con un valor
-void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, TvecRotulo rotulos)
+void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, TvecRotulo rotulos,int nroLinea)
 {
     int i = 0, j = 0, pos;
     char base = '\0';
@@ -138,7 +138,7 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
             }
             else
             {
-                printf("No se encuentra el rotulo\n");
+                printf("ERROR ln.%d:No se encuentra el rotulo\n",nroLinea);
                 *tipo = 0;
                 *operando = 0xFFF;
             }
@@ -314,7 +314,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
             }
             A[j] = '\0';
             elimEspacio(A);
-            tipoOperando(A, &(*inst).topA, &(*inst).vopA, 12, *rotulos);
+            tipoOperando(A, &(*inst).topA, &(*inst).vopA, 12, *rotulos,nroLinea);
 
             j = 0;
             i++;
@@ -328,8 +328,18 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
             B[j] = '\0';
             elimEspacio(B);
             (*inst).topB = -1;
-            tipoOperando(B, &(*inst).topB, &(*inst).vopB, 12, *rotulos);
-            if ((*inst).topB != -1 && (*inst).topA != -1)
+            tipoOperando(B, &(*inst).topB, &(*inst).vopB, 12, *rotulos,nroLinea);
+            //Seguimos leyendo en busqueda de errores
+            comeBasura(cadena, &i);
+            j = 0;
+            B[0] = '\0';
+            while (cadena[i] != '\0' && cadena[i] != ';' && B[0] == '\0')
+            {
+                B[j] = cadena[i];
+                j++;
+                i++;
+            }
+            if ((*inst).topB != -1 && (*inst).topA != -1 && B[0] == '\0')
             {
                 *traduce = 1;
             }
@@ -354,7 +364,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
                 }
                 A[j] = '\0';
                 elimEspacio(A);
-                tipoOperando(A, &(*inst).topA, &(*inst).vopA, 16, *rotulos);
+                tipoOperando(A, &(*inst).topA, &(*inst).vopA, 16, *rotulos,nroLinea);
                 //Seguimos leyendo en busqueda de errores
                 comeBasura(cadena, &i);
                 j = 0;
@@ -459,8 +469,6 @@ void trunca(int *ValorOperando, int bitsmax)
         else
             *ValorOperando &= 0x00000FFF;
         printf("Warning Operacion : Truncamiento del Operando %d, valor nuevo: %d\n", valororiginal, (*ValorOperando));
-        //PREGUNTAR SI EN CASO DE REALIZAR TRUNCAMIENTO, EN EL LUGAR DEL OPERANDO
-        //EN EL ASM, PONGO EL VALOR QUE TOMARIA ESTE EN LA INSTRUCCION.
     }
     else if ((*ValorOperando >= 32767 || *ValorOperando <= -32768) && bitsmax == 16)
     {
