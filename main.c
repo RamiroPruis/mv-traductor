@@ -65,9 +65,10 @@ int main(int argc, char *argv[])
     do
     {
         Desarma(vecLineas[i].cadena, &num, &LineaCodigo, Mnemonicos, &rotulos, i, &traduce);
-        if (traduce){
+        if (traduce)
+        {
             n = traduceInstruccion(num);
-            vectorbinario[i]=n;
+            vectorbinario[i] = n;
         }
         else
         {
@@ -84,11 +85,12 @@ int main(int argc, char *argv[])
 
     if (creaBin)
     {
-        i=0;
+        i = 0;
         if ((arch = fopen(argv[2], "wb")) == NULL)
             return 1;
-        while (i<=topeLineas){
-            fwrite(&(vectorbinario[i]),sizeof(int),1,arch);
+        while (i <= topeLineas)
+        {
+            fwrite(&(vectorbinario[i]), sizeof(int), 1, arch);
             i++;
         }
         fclose(arch);

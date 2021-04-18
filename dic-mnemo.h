@@ -1,9 +1,6 @@
 #define CANT 32
 #define MAX 10
 
-#define CANT 32
-#define MAX 10
-
 typedef struct
 {
     char cadena[256];
