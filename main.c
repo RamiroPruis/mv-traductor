@@ -66,9 +66,11 @@ int main(int argc, char *argv[])
             n = traduceInstruccion(num);
         else
             n = -1; //FF FF FF FF
-        printf("[%04d]: %02X %02X %02X %02X", i, (n >> 24) & 0xFF, (n >> 16) & 0xFF, (n >> 8) & 0xFF, (n >> 0) & 0xFF);
-        printf("%10s %2s %5s %s %15s \n", LineaCodigo.cod, strupr(LineaCodigo.mnemom), strupr(LineaCodigo.op1), strupr(LineaCodigo.op2), LineaCodigo.comentario);
-    } while (i <= topeLineas);
+        if (flag==0){
+            printf("[%04d]: %02X %02X %02X %02X", i, (n >> 24) & 0xFF, (n >> 16) & 0xFF, (n >> 8) & 0xFF, (n >> 0) & 0xFF);
+            printf("%10s %2s %5s %s %15s \n", LineaCodigo.cod, strupr(LineaCodigo.mnemom), strupr(LineaCodigo.op1), strupr(LineaCodigo.op2), LineaCodigo.comentario);
+        }
+    }while (i <= topeLineas);
 
     //Ciclo desarmado
 

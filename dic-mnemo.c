@@ -97,7 +97,7 @@ int encuentramnemo(char mnem[], Tvec vec[], int max)
 }
 
 //tipo tiene que entrar con un valor
-void tipoOperando(char entrada[], int *tipo, int *operando, TvecRotulo rotulos)
+void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando,TvecRotulo rotulos)
 {
     int i = 0, j = 0, pos;
     char base = '\0';
@@ -177,6 +177,7 @@ void tipoOperando(char entrada[], int *tipo, int *operando, TvecRotulo rotulos)
                     *tipo = -1;
                 break;
             }
+            trunca(&(*operando),bitsoperando);
         }
     }
 }
@@ -259,12 +260,8 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     char B[MAX] = "\0";
     int i = 0, j = 0, k = 0, l = 0, pos;
     (*LineaCodigo).comentario[0] = '\0';
-<<<<<<< HEAD
-=======
-
     //Inicializamos la instruccion toda en NULL(-1)
     (*inst).cod = (*inst).topA = (*inst).topB = -1;
->>>>>>> d836e14bdabb04063fcebb7f490ab99d4bc457da
     comeBasura(cadena, &i);
     while (cadena[i] != ' ' && cadena[i] != ':')
     {
@@ -315,9 +312,8 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
             }
             A[j] = '\0';
             elimEspacio(A);
-            tipoOperando(A, &(*inst).topA, &(*inst).vopA, *rotulos);
-            if ((*inst).vopA>4096)
-                (*inst).vopA<<4;
+            tipoOperando(A, &(*inst).topA, &(*inst).vopA,12, *rotulos);
+
             j = 0;
             i++;
             comeBasura(cadena, &i);
@@ -330,9 +326,10 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
             B[j] = '\0';
             elimEspacio(B);
             (*inst).topB = -1;
-            tipoOperando(B, &(*inst).topB, &(*inst).vopB, *rotulos);
-            if ((*inst).topB != -1 && (*inst).topA != -1)
+            tipoOperando(B, &(*inst).topB, &(*inst).vopB,12, *rotulos);
+            if ((*inst).topB != -1 && (*inst).topA != -1){
                 *traduce = 1;
+            }
             else
             {
                 printf("ERROR:\tNo existe la instruccion ingresada\n");
@@ -354,7 +351,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
                 }
                 A[j] = '\0';
                 elimEspacio(A);
-                tipoOperando(A, &(*inst).topA, &(*inst).vopA, *rotulos);
+                tipoOperando(A, &(*inst).topA, &(*inst).vopA,16, *rotulos);
                 //Seguimos leyendo en busqueda de errores
                 comeBasura(cadena, &i);
                 j = 0;
@@ -364,8 +361,9 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
                     j++;
                     i++;
                 }
-                if ((*inst).topB == -1 && (*inst).topA != -1 && B[0] == '\0')
+                if ((*inst).topB == -1 && (*inst).topA != -1 && B[0] == '\0'){
                     *traduce = 1;
+                }
                 else
                 {
                     printf("ERROR:\tNo existe la instruccion ingresada\n");
@@ -430,4 +428,16 @@ void elimEspacio(char cad[])
             cad[j++] = cad[i];
 
     cad[j] = '\0';
+}
+
+void trunca(int *ValorOperando,int bitsmax){
+    if ((*ValorOperando>2047 || *ValorOperando<-2048) && bitsmax==12){
+        *ValorOperando=(*ValorOperando & 0x0FFF);
+         printf("Warning Operacion : Truncamiento del Operando \n");
+    }
+    else
+        if (*ValorOperando>32767 && bitsmax==16){
+            *ValorOperando=*ValorOperando & 0xFFFF;
+            printf("Warning Operacion : Truncamiento del Operando \n");
+        }
 }
