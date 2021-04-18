@@ -1,4 +1,4 @@
-        MOV [   10        ] , 2048   ;asdasdasd
+        MOV [   10        ] , 8192;asdasdasd
     mov  [  20  ], 1
  otro:      cmp [   20  ],100
 jp   fin

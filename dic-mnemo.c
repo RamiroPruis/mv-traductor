@@ -431,13 +431,22 @@ void elimEspacio(char cad[])
 }
 
 void trunca(int *ValorOperando,int bitsmax){
+    int valororiginal=*ValorOperando;
     if ((*ValorOperando>2047 || *ValorOperando<-2048) && bitsmax==12){
-        *ValorOperando=(*ValorOperando & 0x0FFF);
-         printf("Warning Operacion : Truncamiento del Operando \n");
+        if (*ValorOperando&0xFFF>>11) //Bit mas significativo de los 12bits es un 1 --> numero negativo
+            *ValorOperando|=0xFFFFF000;
+        else
+            *ValorOperando&=0x00000FFF;
+        printf("Warning Operacion : Truncamiento del Operando %d, valor nuevo: %d\n",valororiginal,(*ValorOperando));
+//PREGUNTAR SI EN CASO DE REALIZAR TRUNCAMIENTO, EN EL LUGAR DEL OPERANDO
+//EN EL ASM, PONGO EL VALOR QUE TOMARIA ESTE EN LA INSTRUCCION.
     }
     else
-        if (*ValorOperando>32767 && bitsmax==16){
-            *ValorOperando=*ValorOperando & 0xFFFF;
-            printf("Warning Operacion : Truncamiento del Operando \n");
+        if ((*ValorOperando>=32767 || *ValorOperando<=-32768) && bitsmax==16){
+            if (*ValorOperando&0xFFFF>>15)
+                *ValorOperando|=0xFFFF0000;
+            else
+                *ValorOperando&=0x0000FFFF;
+        printf("Warning Operacion : Truncamiento del Operando %d, valor nuevo: %d\n",valororiginal,(*ValorOperando));
         }
 }

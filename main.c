@@ -7,7 +7,6 @@
 int main(int argc, char *argv[])
 {
     Tvec Mnemonicos[CANT];
-    char linea[255];
 
     // Variables para :Lectura archivos
     FILE *arch;
@@ -68,7 +67,7 @@ int main(int argc, char *argv[])
             n = -1; //FF FF FF FF
         if (flag==0){
             printf("[%04d]: %02X %02X %02X %02X", i, (n >> 24) & 0xFF, (n >> 16) & 0xFF, (n >> 8) & 0xFF, (n >> 0) & 0xFF);
-            printf("%10s %2s %5s %s %15s \n", LineaCodigo.cod, strupr(LineaCodigo.mnemom), strupr(LineaCodigo.op1), strupr(LineaCodigo.op2), LineaCodigo.comentario);
+            printf("%10s %4s %4s %6s %15s \n", LineaCodigo.cod, strupr(LineaCodigo.mnemom), strupr(LineaCodigo.op1), strupr(LineaCodigo.op2), LineaCodigo.comentario);
         }
     }while (i <= topeLineas);
 
