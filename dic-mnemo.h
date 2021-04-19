@@ -36,11 +36,8 @@ typedef struct
 
 typedef struct
 {
-    char mnemom[MAX];
     char cod[MAX];
-    char op1[MAX];
-    char op2[MAX];
-    char comentario[100];
+    char comentario[500];
 } lineacod;
 
 void creadicc(Tvec[]);

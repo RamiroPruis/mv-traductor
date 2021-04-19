@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 
     do
     {
-        Desarma(vecLineas[i].cadena, &num, &LineaCodigo, Mnemonicos, &rotulos, i, &traduce);
+      Desarma(vecLineas[i].cadena, &num, &LineaCodigo, Mnemonicos, &rotulos, i, &traduce);
         if (traduce)
         {
             n = traduceInstruccion(num);
@@ -78,7 +78,8 @@ int main(int argc, char *argv[])
         if (flag == 0)
         {
             printf("[%04d]: %02X %02X %02X %02X", i, (n >> 24) & 0xFF, (n >> 16) & 0xFF, (n >> 8) & 0xFF, (n >> 0) & 0xFF);
-            printf("%10s %4s %4s %6s %15s \n", LineaCodigo.cod, strupr(LineaCodigo.mnemom), strupr(LineaCodigo.op1), strupr(LineaCodigo.op2), LineaCodigo.comentario);
+            printf("\t%s\n",LineaCodigo.comentario);
+            //printf("%10s %4s %4s %6s %15s \n", LineaCodigo.cod, strupr(LineaCodigo.mnemom), strupr(LineaCodigo.op1), strupr(LineaCodigo.op2), LineaCodigo.comentario);
         }
         i++;
     } while (i <= topeLineas);

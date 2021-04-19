@@ -256,13 +256,14 @@ void agregaRotulo(TvecRotulo *rotulos, char cod[], int linea)
 
 void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemos[], TvecRotulo *rotulos, int nroLinea, int *traduce) //Cambie esto
 {
-    char lineaentera[200];
+    char lineaentera[500];
     char cod[MAX] = "\0";
     char A[MAX] = "\0";
     char B[MAX] = "\0";
     char C[MAX] = "\0";
     int i = 0, j = 0, k = 0, l = 0, pos;
-    strcpy((*LineaCodigo).comentario, "\0");
+    strcpy((*LineaCodigo).comentario,"\0");
+    strcpy(lineaentera,cadena);
     //Inicializamos la instruccion toda en NULL(-1)
     (*inst).cod = (*inst).topA = (*inst).topB = -1;
     comeBasura(cadena, &i);
@@ -277,7 +278,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     //Caso con rotulo
     if (cadena[i] == ':')
     {
-        strcpy((*LineaCodigo).cod, cod);
+        sprintf((*LineaCodigo).comentario,"\t   %s",lineaentera);
         strcpy(cod, ""); //Ponemos en cero nuevamente el cod
         //Debe de seguir leyendo hasta encontrar un mnemonico
         i++; //Como estabamos parados en ':' ahora avanza al siguiente caracter
@@ -291,19 +292,17 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
         }
         cod[l] = '\0';
     }
-    else
-        sprintf((*LineaCodigo).cod, "%d:", nroLinea);
+    else{
+        sprintf((*LineaCodigo).comentario, "%15d: %s", nroLinea+1,lineaentera);
+    }
     i++;
     //Para que no se rompa
-
+    //strcpy((*LineaCodigo).comentario, cod);
     pos = encuentramnemo(cod, mnemos, 24); //busco la posicion del mnemonico en el diccionario, si no encuentro devuelve -1
     //Agrego codigo instruccion
     if (pos != -1)
     {
-
         (*inst).cod = mnemos[pos].hex;
-        strcpy((*LineaCodigo).mnemom, cod);
-
         if ((*inst).cod < 0xF0)
         { //2 operandos
             comeBasura(cadena, &i);
@@ -316,7 +315,6 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
             A[j] = '\0';
             elimEspacio(A);
             tipoOperando(A, &(*inst).topA, &(*inst).vopA, 12, *rotulos, nroLinea);
-
             j = 0;
             i++;
             comeBasura(cadena, &i);
@@ -337,16 +335,14 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
             comeBasura(cadena, &i);
             j = 0;
             C[0] = '\0';
-            while (cadena[i] != '\0' && cadena[i] != ';' && C[0] == '\0')
+            while (cadena[i] != '\0' && cadena[i] != ';')
             {
                 C[j] = cadena[i];
                 j++;
                 i++;
             }
             if ((*inst).topB != -1 && (*inst).topA != -1 && C[0] == '\0')
-            {
                 *traduce = 1;
-            }
             else
             {
                 printf("ERROR:\tNo existe la instruccion ingresada\n");
@@ -367,7 +363,6 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
                     i++;
                 }
                 A[j] = '\0';
-                elimEspacio(A);
                 tipoOperando(A, &(*inst).topA, &(*inst).vopA, 16, *rotulos, nroLinea);
                 //Seguimos leyendo en busqueda de errores
                 comeBasura(cadena, &i);
@@ -378,10 +373,8 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
                     j++;
                     i++;
                 }
-                if ((*inst).topB == -1 && (*inst).topA != -1 && B[0] == '\0')
-                {
+               if ((*inst).topB == -1 && (*inst).topA != -1 && B[0] == '\0')
                     *traduce = 1;
-                }
                 else
                 {
                     printf("ERROR:\tNo existe la instruccion ingresada\n");
@@ -422,28 +415,27 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
         //         (*LineaCodigo).comentario[j] = '\0';
         //     }
         // }
-        strcpy((*LineaCodigo).op1, A);
-        strcpy((*LineaCodigo).op2, B);
     }
     else
     {
         *traduce = 0;
         printf("ERROR:\tNo existe la instruccion ingresada\n");
     }
-    if (cadena[i] != '\n')
+    /*if (cadena[i] != '\n')
     { //no cambia de linea, entonces tengo un comentario u otra instruccion;
         if (cadena[i] == ';')
         {
-            j = 0;
+            j = 1;
             while (cadena[i] != '\n' && cadena[i] != '\0')
             {
                 (*LineaCodigo).comentario[j] = cadena[i];
                 i++;
                 j++;
             }
+            (*LineaCodigo).comentario[0]='\t';
             (*LineaCodigo).comentario[j] = '\0';
         }
-    }
+    }*/
 }
 
 void comeBasura(char cad[], int *i)
@@ -468,15 +460,15 @@ void trunca(int *ValorOperando, int bitsmax)
     int valororiginal = *ValorOperando;
     if ((*ValorOperando > 2047 || *ValorOperando < -2048) && bitsmax == 12)
     {
-        if (*ValorOperando & 0xFFF >> 11) //Bit mas significativo de los 12bits es un 1 --> numero negativo
+        if ((*ValorOperando & 0xFFF) >> 11) //Bit mas significativo de los 12bits es un 1 --> numero negativo
             *ValorOperando |= 0xFFFFF000;
         else
-            *ValorOperando &= 0x00000FFF;
+            *ValorOperando = (*ValorOperando & 0x00000FFF);
         printf("Warning Operacion : Truncamiento del Operando %d, valor nuevo: %d\n", valororiginal, (*ValorOperando));
     }
     else if ((*ValorOperando >= 32767 || *ValorOperando <= -32768) && bitsmax == 16)
     {
-        if (*ValorOperando & 0xFFFF >> 15)
+        if ((*ValorOperando & 0xFFFF) >> 15)
             *ValorOperando |= 0xFFFF0000;
         else
             *ValorOperando &= 0x0000FFFF;
