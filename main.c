@@ -25,7 +25,6 @@ int main(int argc, char *argv[])
     //Inicializaciones
     rotulos.tope = -1;
     creadicc(Mnemonicos);
-    /*
     if (argc > 4)
      {
          printf("Error. Demasiados argumentos");
@@ -43,11 +42,10 @@ int main(int argc, char *argv[])
              flag = 1; //Omite la salida por pantalla de la traduccion.
          }
      }
-    */
     // COMIENZA Lectura del archivo .asm
-    strcpy(txt, "fibo.asm");
-    argv[1] = (char *)malloc(25);
-    strcpy(argv[1], txt);
+    //strcpy(txt, "fibo.asm");
+    //argv[1] = (char *)malloc(25);
+    //strcpy(argv[1], txt);
     if ((arch = fopen(argv[1], "r")) == NULL)
         return 1;
     while (fgets(vecLineas[topeLineas].cadena, 256, arch) != NULL)

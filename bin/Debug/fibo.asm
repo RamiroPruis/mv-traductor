@@ -1,6 +1,6 @@
-        mov [10], 0 	;inicializo variables
+        mov [10], 3000 	;inicializo variables
         mov [20], 1
-otro:   cmp [20], 100 	;compara
+otro:	 cmp [20], 100 	;compara
         jp fin 		;salta si llego a 100 o más
         swap [10], [20]
         add [20], [10]
@@ -8,5 +8,5 @@ otro:   cmp [20], 100 	;compara
         mov cx, 1
         mov dx, 10
         sys 2 		;print [10] en decimal
-        jmp              otroooo
+        jmp otro
 fin: 	stop
