@@ -37,7 +37,10 @@ typedef struct
 typedef struct
 {
     char cod[MAX];
-    char comentario[500];
+    char mnemom[MAX];
+    char op1[MAX];
+    char op2[MAX];
+    char comentario[200];
 } lineacod;
 
 void creadicc(Tvec[]);
@@ -51,3 +54,4 @@ int buscaRotulo(char[], TvecRotulo);
 void comeBasura(char[], int *);
 void elimEspacio(char[]);
 void trunca(int *, int);
+void IniciaCadena(lineacod*);

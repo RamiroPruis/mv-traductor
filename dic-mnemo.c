@@ -254,7 +254,15 @@ void agregaRotulo(TvecRotulo *rotulos, char cod[], int linea)
     (*rotulos).rot[(*rotulos).tope] = rotAux; //Medio enroscado, pero hace que el tema rotulo quede todo en una sola estructora, charlar con los chicos
 }
 
-void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemos[], TvecRotulo *rotulos, int nroLinea, int *traduce) //Cambie esto
+void IniciaCadena(lineacod *LineaCodigo){
+    memset((*LineaCodigo).cod,0,sizeof((*LineaCodigo).cod));
+    memset((*LineaCodigo).mnemom,0,sizeof((*LineaCodigo).mnemom));
+    memset((*LineaCodigo).op1,0,sizeof((*LineaCodigo).op1));
+    memset((*LineaCodigo).op2,0,sizeof((*LineaCodigo).op2));
+    memset((*LineaCodigo).comentario,0,sizeof((*LineaCodigo).comentario));
+}
+
+void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemos[], TvecRotulo *rotulos, int nroLinea, int *traduce)
 {
     char lineaentera[500];
     char cod[MAX] = "\0";
@@ -262,8 +270,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     char B[MAX] = "\0";
     char C[MAX] = "\0";
     int i = 0, j = 0, k = 0, l = 0, pos;
-    strcpy((*LineaCodigo).comentario,"\0");
-    strcpy(lineaentera,cadena);
+    IniciaCadena(LineaCodigo);
     //Inicializamos la instruccion toda en NULL(-1)
     (*inst).cod = (*inst).topA = (*inst).topB = -1;
     comeBasura(cadena, &i);
@@ -278,8 +285,8 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     //Caso con rotulo
     if (cadena[i] == ':')
     {
-        sprintf((*LineaCodigo).comentario,"\t   %s",lineaentera);
-        strcpy(cod, ""); //Ponemos en cero nuevamente el cod
+        sprintf((*LineaCodigo).cod,"%s:",cod);
+        strcpy(cod,""); //Ponemos en cero nuevamente el cod
         //Debe de seguir leyendo hasta encontrar un mnemonico
         i++; //Como estabamos parados en ':' ahora avanza al siguiente caracter
         l = 0;
@@ -293,7 +300,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
         cod[l] = '\0';
     }
     else{
-        sprintf((*LineaCodigo).comentario, "%15d: %s", nroLinea+1,lineaentera);
+        sprintf((*LineaCodigo).cod,"%d:",nroLinea);
     }
     i++;
     //Para que no se rompa
@@ -302,6 +309,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     //Agrego codigo instruccion
     if (pos != -1)
     {
+        strcpy((*LineaCodigo).mnemom,cod);
         (*inst).cod = mnemos[pos].hex;
         if ((*inst).cod < 0xF0)
         { //2 operandos
@@ -315,6 +323,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
             A[j] = '\0';
             elimEspacio(A);
             tipoOperando(A, &(*inst).topA, &(*inst).vopA, 12, *rotulos, nroLinea);
+            A[j]=',';
             j = 0;
             i++;
             comeBasura(cadena, &i);
@@ -364,6 +373,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
                 }
                 A[j] = '\0';
                 tipoOperando(A, &(*inst).topA, &(*inst).vopA, 16, *rotulos, nroLinea);
+                A[j]='\t';
                 //Seguimos leyendo en busqueda de errores
                 comeBasura(cadena, &i);
                 j = 0;
@@ -421,21 +431,22 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
         *traduce = 0;
         printf("ERROR:\tNo existe la instruccion ingresada\n");
     }
-    /*if (cadena[i] != '\n')
+    strcpy((*LineaCodigo).op1,A);
+    strcpy((*LineaCodigo).op2,B);
+    if (cadena[i] != '\n')
     { //no cambia de linea, entonces tengo un comentario u otra instruccion;
         if (cadena[i] == ';')
         {
-            j = 1;
+            j = 0;
             while (cadena[i] != '\n' && cadena[i] != '\0')
             {
                 (*LineaCodigo).comentario[j] = cadena[i];
                 i++;
                 j++;
             }
-            (*LineaCodigo).comentario[0]='\t';
             (*LineaCodigo).comentario[j] = '\0';
         }
-    }*/
+    }
 }
 
 void comeBasura(char cad[], int *i)
