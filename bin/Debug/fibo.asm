@@ -1,6 +1,6 @@
         mov [10], 3000 	;inicializo variables
         mov [20], 1
-otro:	 cmp [20], 100 	;compara
+otro:	cmp [20], 100 	;compara
         jp fin 		;salta si llego a 100 o más
         swap [10], [20]
         add [20], [10]
