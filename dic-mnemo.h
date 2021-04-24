@@ -37,7 +37,10 @@ typedef struct
 typedef struct
 {
     char cod[MAX];
-    char comentario[500];
+    char mnemom[MAX];
+    char op1[MAX];
+    char op2[MAX];
+    char comentario[200];
 } lineacod;
 
 void creadicc(Tvec[]);
@@ -46,8 +49,9 @@ void tipoOperando(char[], int *, int *, int, TvecRotulo, int);
 int traduceInstruccion(instruccion);
 void agregaRotulo(TvecRotulo *, char[], int);
 void cargaRotulos(TvecCadenas[], int, TvecRotulo *);
-void Desarma(char[], instruccion *, lineacod *, Tvec[], TvecRotulo *, int, int *);
+void Desarma(char[], instruccion *, lineacod *, Tvec[], TvecRotulo *, int, int *, int *);
 int buscaRotulo(char[], TvecRotulo);
 void comeBasura(char[], int *);
 void elimEspacio(char[]);
 void trunca(int *, int);
+void IniciaCadena(lineacod *);

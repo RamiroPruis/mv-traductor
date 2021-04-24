@@ -7,7 +7,7 @@
 int main(int argc, char *argv[])
 {
     Tvec Mnemonicos[CANT];
-
+    int vacia = 0;
     // Variables para :Lectura archivos
     FILE *arch;
     int flag = 0;
@@ -19,12 +19,14 @@ int main(int argc, char *argv[])
     int i = 0;
     int traduce, creaBin = 1;
     int n;
+    int k = 0;
     instruccion num;
     TvecRotulo rotulos;
 
     //Inicializaciones
     rotulos.tope = -1;
     creadicc(Mnemonicos);
+    /*
     if (argc > 4)
      {
          printf("Error. Demasiados argumentos");
@@ -41,11 +43,11 @@ int main(int argc, char *argv[])
             if (argc==4 && strcmp(argv[3],"-o")==0)
              flag = 1; //Omite la salida por pantalla de la traduccion.
          }
-     }
+     }*/
     // COMIENZA Lectura del archivo .asm
-    //strcpy(txt, "fibo.asm");
-    //argv[1] = (char *)malloc(25);
-    //strcpy(argv[1], txt);
+    strcpy(txt, "fibo (1).asm");
+    argv[1] = (char *)malloc(25);
+    strcpy(argv[1], txt);
     if ((arch = fopen(argv[1], "r")) == NULL)
         return 1;
     while (fgets(vecLineas[topeLineas].cadena, 256, arch) != NULL)
@@ -62,7 +64,8 @@ int main(int argc, char *argv[])
 
     do
     {
-      Desarma(vecLineas[i].cadena, &num, &LineaCodigo, Mnemonicos, &rotulos, i, &traduce);
+        vacia = 0;
+        Desarma(vecLineas[i].cadena, &num, &LineaCodigo, Mnemonicos, &rotulos, k, &traduce, &vacia);
         if (traduce)
         {
             n = traduceInstruccion(num);
@@ -70,23 +73,35 @@ int main(int argc, char *argv[])
         }
         else
         {
-            n = -1; //FF FF FF FF
-            creaBin = 0;
+            if (!vacia)
+            {
+                n = -1; //FF FF FF FF
+                creaBin = 0;
+            }
+            else
+            {
+                k--;
+                creaBin = 1;
+                printf("\t\t\t%s \n", LineaCodigo.comentario);
+            }
         }
-        if (flag == 0)
+        if (flag == 0 && !vacia)
         {
-            printf("[%04d]: %02X %02X %02X %02X", i, (n >> 24) & 0xFF, (n >> 16) & 0xFF, (n >> 8) & 0xFF, (n >> 0) & 0xFF);
-            printf("\t%s\n",LineaCodigo.comentario);
-            //printf("%10s %4s %4s %6s %15s \n", LineaCodigo.cod, strupr(LineaCodigo.mnemom), strupr(LineaCodigo.op1), strupr(LineaCodigo.op2), LineaCodigo.comentario);
+            printf("[%04d]: %02X %02X %02X %02X", k, (n >> 24) & 0xFF, (n >> 16) & 0xFF, (n >> 8) & 0xFF, (n >> 0) & 0xFF);
+            printf("%10s %4s %s %s \t%s \n", LineaCodigo.cod, strupr(LineaCodigo.mnemom), strupr(LineaCodigo.op1), strupr(LineaCodigo.op2), LineaCodigo.comentario);
         }
         i++;
+        k++;
     } while (i <= topeLineas);
 
     if (creaBin)
     {
         i = 0;
-        if ((arch = fopen(argv[2], "wb")) == NULL)
+        if ((arch = fopen("holaquetal.bin", "wb")) == NULL)
+        {
             return 1;
+        }
+        // Se rompe
         while (i <= topeLineas)
         {
             fwrite(&(vectorbinario[i]), sizeof(int), 1, arch);
