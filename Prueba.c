@@ -4,9 +4,6 @@
 #define MAX 10
 #define CANT 32
 
-#define CANT 32
-#define MAX 10
-
 typedef struct
 {
     char cadena[256];
@@ -103,7 +100,7 @@ int main(int argc, char *argv[])
          }
      }*/
     // COMIENZA Lectura del archivo .asm
-    strcpy(txt, "fibo (1).asm");
+    strcpy(txt, "fibo.asm");
     argv[1] = (char *)malloc(25);
     strcpy(argv[1], txt);
     if ((arch = fopen(argv[1], "r")) == NULL)
@@ -120,6 +117,7 @@ int main(int argc, char *argv[])
 
     //Ciclo desarmado
 
+    int topeBinario = topeLineas;
     do
     {
         vacia = 0;
@@ -127,7 +125,7 @@ int main(int argc, char *argv[])
         if (traduce)
         {
             n = traduceInstruccion(num);
-            vectorbinario[i] = n;
+            vectorbinario[k] = n;
         }
         else
         {
@@ -139,6 +137,7 @@ int main(int argc, char *argv[])
             else
             {
                 k--;
+                topeBinario--;
                 creaBin = 1;
                 printf("\t\t\t%s \n", LineaCodigo.comentario);
             }
@@ -160,7 +159,7 @@ int main(int argc, char *argv[])
             return 1;
         }
         // Se rompe
-        while (i <= topeLineas)
+        while (i <= topeBinario)
         {
             fwrite(&(vectorbinario[i]), sizeof(int), 1, arch);
             i++;

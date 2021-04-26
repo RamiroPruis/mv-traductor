@@ -7,7 +7,9 @@ otro: 	cmp [20], 100 	;compara
         mov ax, %001
         mov cx, 1
         mov dx, 10
-;esta es una linea en comentario
+        sys 15
+;asdasd
+;asdasd
         sys 2 		;print [10] en decimal
         jmp otro
 fin: 	stop
