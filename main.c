@@ -63,7 +63,9 @@ int main(int argc, char *argv[])
     do
     {
         vacia = 0;
+        IniciaCadena(&LineaCodigo);
         Desarma(vecLineas[i].cadena, &num, &LineaCodigo, Mnemonicos, &rotulos, k, &traduce, &vacia);
+
         if (traduce)
         {
             n = traduceInstruccion(num);
@@ -80,7 +82,6 @@ int main(int argc, char *argv[])
             {
                 k--;
                 topeBinario--;
-                creaBin = 1;
                 printf("\t\t\t%s \n", LineaCodigo.comentario);
             }
         }
@@ -98,7 +99,7 @@ int main(int argc, char *argv[])
         i = 0;
         if ((arch = fopen(argv[2], "wb")) == NULL)
         {
-            return 1;
+            return -1;
         }
         // Se rompe
         while (i <= topeBinario)
@@ -109,6 +110,7 @@ int main(int argc, char *argv[])
         fclose(arch);
         printf("Archivo binario creado con exito. Traduccion exitosa");
     }
-
+    else
+            printf("No se creo el binario");
     return 0;
 }

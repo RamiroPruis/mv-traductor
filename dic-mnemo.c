@@ -97,7 +97,7 @@ int encuentramnemo(char mnem[], Tvec vec[], int max)
 }
 
 //tipo tiene que entrar con un valor
-void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, TvecRotulo rotulos, int nroLinea)
+void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, TvecRotulo rotulos, int nroLinea, int *traduce)
 {
     int i = 0, j = 0, pos;
     char base = '\0';
@@ -141,6 +141,7 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
                 printf("ERROR ln.%d:No se encuentra el rotulo\n", nroLinea);
                 *tipo = 0;
                 *operando = 0xFFF;
+                *traduce=0;
             }
         }
         else
@@ -148,7 +149,7 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
             //Operando inmediato
             if (*tipo != 2)
                 *tipo = 0;
-            if (num[0] == '#' || num[0] == '@' || num[0] == '%' || num[0] == '`')
+            if (num[0] == '#' || num[0] == '@' || num[0] == '%' || num[0] == '\'')
             {
                 base = num[0];
                 j = 0;
@@ -169,7 +170,7 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
             case '%':
                 *operando = strtol(num, NULL, 16);
                 break;
-            case '`':
+            case '\'':
                 *operando = num[0];
                 break;
             default:
@@ -276,7 +277,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     char B[MAX] = "\0";
     char C[MAX] = "\0";
     int i = 0, j = 0, k = 0, l = 0, pos;
-    IniciaCadena(LineaCodigo);
+    *traduce=1;
     //Inicializamos la instruccion toda en NULL(-1)
     (*inst).cod = (*inst).topA = (*inst).topB = -1;
     comeBasura(cadena, &i);
@@ -332,7 +333,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
             }
             A[j] = '\0';
             elimEspacio(A);
-            tipoOperando(A, &(*inst).topA, &(*inst).vopA, 12, *rotulos, nroLinea);
+            tipoOperando(A, &(*inst).topA, &(*inst).vopA, 12, *rotulos, nroLinea,traduce);
             A[j] = ',';
             j = 0;
             i++;
@@ -349,7 +350,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
             B[j] = '\0';
             elimEspacio(B);
             (*inst).topB = -1;
-            tipoOperando(B, &(*inst).topB, &(*inst).vopB, 12, *rotulos, nroLinea);
+            tipoOperando(B, &(*inst).topB, &(*inst).vopB, 12, *rotulos, nroLinea,traduce);
             //Seguimos leyendo en busqueda de errores
             comeBasura(cadena, &i);
             j = 0;
@@ -360,7 +361,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
                 j++;
                 i++;
             }
-            if ((*inst).topB != -1 && (*inst).topA != -1 && C[0] == '\0')
+            if (*traduce && (*inst).topB != -1 && (*inst).topA != -1 && C[0] == '\0')
                 *traduce = 1;
             else
             {
@@ -382,7 +383,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
                     i++;
                 }
                 A[j] = '\0';
-                tipoOperando(A, &(*inst).topA, &(*inst).vopA, 16, *rotulos, nroLinea);
+                tipoOperando(A, &(*inst).topA, &(*inst).vopA, 16, *rotulos, nroLinea,traduce);
                 A[j] = '\t';
                 //Seguimos leyendo en busqueda de errores
                 comeBasura(cadena, &i);
@@ -393,7 +394,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
                     j++;
                     i++;
                 }
-                if ((*inst).topB == -1 && (*inst).topA != -1 && B[0] == '\0')
+                if (*traduce && (*inst).topB == -1 && (*inst).topA != -1 && B[0] == '\0')
                     *traduce = 1;
                 else
                 {
@@ -412,7 +413,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
                     j++;
                     i++;
                 }
-                if ((*inst).topB == -1 && (*inst).topA == -1 && A[0] == '\0')
+                if (*traduce && (*inst).topB == -1 && (*inst).topA == -1 && A[0] == '\0')
                     *traduce = 1;
                 else
                 {
@@ -420,22 +421,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
                     *traduce = 0;
                 }
             }
-        } /*
-         if (cadena[i] != '\n')
-         { //no cambia de linea, entonces tengo un comentario u otra instruccion;
-             printf("entro \n");
-             if (cadena[i] == ';')
-             {
-                 j = 0;
-                 while (cadena[i] != '\n' && cadena[i] != '\0')
-                 {
-                     (*LineaCodigo).comentario[j] = cadena[i];
-                     i++;
-                     j++;
-                 }
-                 (*LineaCodigo).comentario[j] = '\0';
-             }
-         }*/
+        }
     }
     else
     {
