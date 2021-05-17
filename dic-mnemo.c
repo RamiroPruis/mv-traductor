@@ -141,7 +141,7 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
                 printf("ERROR ln.%d:No se encuentra el rotulo\n", nroLinea);
                 *tipo = 0;
                 *operando = 0xFFF;
-                *traduce=0;
+                *traduce = 0;
             }
         }
         else
@@ -277,11 +277,11 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     char B[MAX] = "\0";
     char C[MAX] = "\0";
     int i = 0, j = 0, k = 0, l = 0, pos;
-    *traduce=1;
+    *traduce = 1;
     //Inicializamos la instruccion toda en NULL(-1)
     (*inst).cod = (*inst).topA = (*inst).topB = -1;
     comeBasura(cadena, &i);
-    while (cadena[i] != ';' && cadena[i] != ' ' && cadena[i] != ':')
+    while (cadena[i] != ';' && cadena[i] != ' ' && cadena[i] != ':' && cadena[i] != '\0')
     {
         cod[j] = cadena[i];
         i++;
@@ -333,7 +333,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
             }
             A[j] = '\0';
             elimEspacio(A);
-            tipoOperando(A, &(*inst).topA, &(*inst).vopA, 12, *rotulos, nroLinea,traduce);
+            tipoOperando(A, &(*inst).topA, &(*inst).vopA, 12, *rotulos, nroLinea, traduce);
             A[j] = ',';
             j = 0;
             i++;
@@ -350,7 +350,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
             B[j] = '\0';
             elimEspacio(B);
             (*inst).topB = -1;
-            tipoOperando(B, &(*inst).topB, &(*inst).vopB, 12, *rotulos, nroLinea,traduce);
+            tipoOperando(B, &(*inst).topB, &(*inst).vopB, 12, *rotulos, nroLinea, traduce);
             //Seguimos leyendo en busqueda de errores
             comeBasura(cadena, &i);
             j = 0;
@@ -383,7 +383,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
                     i++;
                 }
                 A[j] = '\0';
-                tipoOperando(A, &(*inst).topA, &(*inst).vopA, 16, *rotulos, nroLinea,traduce);
+                tipoOperando(A, &(*inst).topA, &(*inst).vopA, 16, *rotulos, nroLinea, traduce);
                 A[j] = '\t';
                 //Seguimos leyendo en busqueda de errores
                 comeBasura(cadena, &i);

@@ -27,25 +27,27 @@ int main(int argc, char *argv[])
     rotulos.tope = -1;
     creadicc(Mnemonicos);
 
-    if (argc > 4)
-     {
-         printf("Error. Demasiados argumentos");
-         exit(1);
-     }
-     else{
-        if (argc < 3)
-        {
-            printf("Error. Pocos argumentos \n");
-            printf("Ejemplo: mvc.exe AsmFilename.asm BinFilename.bin [-o]");
-            exit(1);
-        }
-        else{
-            if (argc==4 && strcmp(argv[3],"-o")==0)
-             flag = 1; //Omite la salida por pantalla de la traduccion.
-         }
-     }
+    // if (argc > 4)
+    // {
+    //     printf("Error. Demasiados argumentos");
+    //     exit(1);
+    // }
+    // else
+    // {
+    //     if (argc < 3)
+    //     {
+    //         printf("Error. Pocos argumentos \n");
+    //         printf("Ejemplo: mvc.exe AsmFilename.asm BinFilename.bin [-o]");
+    //         exit(1);
+    //     }
+    //     else
+    //     {
+    //         if (argc == 4 && strcmp(argv[3], "-o") == 0)
+    //             flag = 1; //Omite la salida por pantalla de la traduccion.
+    //     }
+    // }
     // COMIENZA Lectura del archivo .asm
-    if ((arch = fopen(argv[1], "r")) == NULL)
+    if ((arch = fopen("Ejercicios assembler\\2.asm", "r")) == NULL)
         return 1;
     while (fgets(vecLineas[topeLineas].cadena, 256, arch) != NULL)
         topeLineas++;
@@ -97,7 +99,7 @@ int main(int argc, char *argv[])
     if (creaBin)
     {
         i = 0;
-        if ((arch = fopen(argv[2], "wb")) == NULL)
+        if ((arch = fopen("bin2.bin", "wb")) == NULL)
         {
             return -1;
         }
@@ -111,6 +113,6 @@ int main(int argc, char *argv[])
         printf("Archivo binario creado con exito. Traduccion exitosa");
     }
     else
-            printf("No se creo el binario");
+        printf("No se creo el binario");
     return 0;
 }
