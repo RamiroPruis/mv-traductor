@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     //     }
     // }
     // COMIENZA Lectura del archivo .asm
-    if ((arch = fopen("Ejercicios assembler\\2.asm", "r")) == NULL)
+    if ((arch = fopen("Ejercicios assembler\\3.asm", "r")) == NULL)
         return 1;
     while (fgets(vecLineas[topeLineas].cadena, 256, arch) != NULL)
         topeLineas++;
@@ -484,8 +484,8 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
         sprintf((*LineaCodigo).cod, "%d:", nroLinea);
     }
 
-    if (cadena[i] != ';')
-        i++;
+    // if (cadena[i] != ';')
+    //     i++;
 
     //Para que no se rompa
     //strcpy((*LineaCodigo).comentario, cod);
@@ -599,6 +599,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     else
     {
         *traduce = 0;
+        comeBasura(cadena, &i);
         if (cadena[i] != ';' && cadena[i] != ' ' && cadena[i] != '\0' && cadena[i] != '\n')
         {
             printf("ERROR:\tNo existe la instruccion ingresada\n");

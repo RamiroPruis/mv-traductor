@@ -311,8 +311,8 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
         sprintf((*LineaCodigo).cod, "%d:", nroLinea);
     }
 
-    if (cadena[i] != ';')
-        i++;
+    // if (cadena[i] != ';')
+    //     i++;
 
     //Para que no se rompa
     //strcpy((*LineaCodigo).comentario, cod);
@@ -426,6 +426,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     else
     {
         *traduce = 0;
+        comeBasura(cadena, &i);
         if (cadena[i] != ';' && cadena[i] != ' ' && cadena[i] != '\0' && cadena[i] != '\n')
         {
             printf("ERROR:\tNo existe la instruccion ingresada\n");
