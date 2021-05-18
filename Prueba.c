@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
     if (creaBin)
     {
         i = 0;
-        if ((arch = fopen("bin2.bin", "wb")) == NULL)
+        if ((arch = fopen("3.bin", "wb")) == NULL)
         {
             return -1;
         }

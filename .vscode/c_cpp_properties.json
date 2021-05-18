@@ -5,14 +5,14 @@
             "includePath": [
                 "${workspaceFolder}",
                 "C:/Users/maria/Desktop/Facu/Arquitectura de Computadoras/MV/mv-traductor",
-                "C:/MinGW/lib/gcc/mingw32/6.3.0/include/c++/mingw32"
+                "C:\\mingw64\\lib\\gcc\\mingw64\\6.3.0/include/c++/mingw32"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "C:\\MinGW\\bin\\gcc.exe",
+            "compilerPath": "C:\\mingw64\\bin\\gcc.exe",
             "cStandard": "gnu11",
             "cppStandard": "gnu++14",
             "intelliSenseMode": "windows-gcc-x86"

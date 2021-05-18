@@ -15,7 +15,7 @@
 sigue:  mov     ex  ,   [0]
         shl     [0] ,   1
         shr     ex  ,   31
-        amd     ex  ,   1
+        and     ex  ,   1
         mul     [1] ,   10
         add     [1] ,   ex
         sub     ax  ,   1
