@@ -20,4 +20,4 @@
     shr cx, 31    
     mov [5], cx
     sys %F 
-    stop
+    stop 

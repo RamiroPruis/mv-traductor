@@ -101,7 +101,7 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
 {
     int i = 0, j = 0, pos;
     char base = '\0';
-    char num[6];
+    char num[15];
     Tvec reg[16];
 
     creaReg(reg);
@@ -341,14 +341,15 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
             while (cadena[i] != '\0' && cadena[i] != ';' && cadena[i] != ',')
             {
                 //Come basura necesario adentro para que detecte el futuro error si hay otro operando
-                comeBasura(cadena, &i);
+                //comeBasura(cadena, &i);
                 B[j] = cadena[i];
                 j++;
                 i++;
-                comeBasura(cadena, &i);
+                if (B[0]!='\'')
+                    comeBasura(cadena, &i);
             }
             B[j] = '\0';
-            elimEspacio(B);
+            //elimEspacio(B);
             (*inst).topB = -1;
             tipoOperando(B, &(*inst).topB, &(*inst).vopB, 12, *rotulos, nroLinea, traduce);
             //Seguimos leyendo en busqueda de errores
