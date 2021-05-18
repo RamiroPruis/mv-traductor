@@ -16,10 +16,9 @@ int main(int argc, char *argv[])
     TvecCadenas vecLineas[2000];
     lineacod LineaCodigo;
     char txt[25];
-    int i = 0;
+    int i = 0, j;
     int traduce, creaBin = 1;
-    int n;
-    int k = 0;
+    int n, k=0;
     instruccion num;
     TvecRotulo rotulos;
 
@@ -47,13 +46,23 @@ int main(int argc, char *argv[])
     //     }
     // }
     // COMIENZA Lectura del archivo .asm
-    if ((arch = fopen("Ejercicios assembler\\2.asm", "r")) == NULL)
+    if ((arch = fopen("Ejercicios assembler\\5.asm", "r")) == NULL)
         return 1;
-    while (fgets(vecLineas[topeLineas].cadena, 256, arch) != NULL)
-        topeLineas++;
+    while (fgets(vecLineas[topeLineas].cadena, 256, arch) != NULL){
+        j=0;
+        while(vecLineas[topeLineas].cadena[j]!= 13 && vecLineas[topeLineas].cadena[j]!= '\n')
+            j++;
+        if (j!=0)
+            vecLineas[topeLineas].cadena[j]='\0';
+        if (vecLineas[topeLineas].cadena[0] != '\n' && vecLineas[topeLineas].cadena[0] != '\0')
+            topeLineas++;
+        fflush(stdin);
+    }
+
+
     topeLineas--;
-    for (int i = 0; i < topeLineas; i++)
-        vecLineas[i].cadena[strlen(vecLineas[i].cadena) - 1] = '\0';
+ //   for (int i = 0; i < topeLineas; i++)
+ //       vecLineas[i].cadena[strlen(vecLineas[i].cadena) - 1] = '\0';
     fclose(arch);
     // FIN Lectura del archivo .asm
 
@@ -99,7 +108,7 @@ int main(int argc, char *argv[])
     if (creaBin)
     {
         i = 0;
-        if ((arch = fopen("bin2.bin", "wb")) == NULL)
+        if ((arch = fopen("Ejercicios assembler\\5.bin", "wb")) == NULL)
         {
             return -1;
         }
