@@ -55,3 +55,4 @@ void comeBasura(char[], int *);
 void elimEspacio(char[]);
 void trunca(int *, int);
 void IniciaCadena(lineacod *);
+void seteaHeader(char[],int*,int*,int*);

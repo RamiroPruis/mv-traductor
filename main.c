@@ -19,6 +19,11 @@ int main(int argc, char *argv[])
     int i = 0, j;
     int traduce, creaBin = 1;
     int n, k=0;
+    int tamDS, tamSS, tamES, tamCS;
+    char header[256];
+
+    tamDS=tamSS=tamES= 1024; //Por defecto cada segment ocupa 1024
+
     instruccion num;
     TvecRotulo rotulos;
 
@@ -48,8 +53,16 @@ int main(int argc, char *argv[])
     // COMIENZA Lectura del archivo .asm
     if ((arch = fopen("Ejercicios assembler\\5.asm", "r")) == NULL)
         return 1;
+
+    //LEE HEADER
+    fgets(header,256,arch);
+    printf("%s\n",header);
+    seteaHeader(header,&tamDS,&tamES,&tamSS);
+    //LEE HEADER
+
     while (fgets(vecLineas[topeLineas].cadena, 256, arch) != NULL){
         j=0;
+
         while(vecLineas[topeLineas].cadena[j]!= 13 && vecLineas[topeLineas].cadena[j]!= '\n')
             j++;
         if (j!=0)
@@ -108,11 +121,23 @@ int main(int argc, char *argv[])
     if (creaBin)
     {
         i = 0;
+        char FIJO[5] = "MV21";
+
         if ((arch = fopen("Ejercicios assembler\\5.bin", "wb")) == NULL)
         {
             return -1;
         }
         // Se rompe
+
+        //HEADER
+        fwrite(&FIJO,sizeof(char),strlen(FIJO),arch); //escribe "MVC 21"
+        fwrite(&tamDS,sizeof(int),1,arch);
+        fwrite(&tamSS,sizeof(int),1,arch);
+        fwrite(&tamES,sizeof(int),1,arch);
+        fwrite(&topeLineas,sizeof(int),1,arch);
+        //HEADER
+
+        //ARRANCA A ESCRIBIR EL CODIGO TRADUCIDO
         while (i <= topeBinario)
         {
             fwrite(&(vectorbinario[i]), sizeof(int), 1, arch);

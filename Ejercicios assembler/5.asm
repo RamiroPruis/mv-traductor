@@ -1,3 +1,5 @@
+\\ASM DATA=10  STACK=3000
+
 ; Bueno, ya hemos terminado o casi...
         mov     [0], %62
         mov     [1], @165

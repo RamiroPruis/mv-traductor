@@ -55,6 +55,20 @@ void creadicc(Tvec vec[])
     vec[23].hex = 0xFB;
     strcpy(vec[24].mnemo, "STOP");
     vec[24].hex = 0xFF1;
+    strcpy(vec[25].mnemo, "SLEN");
+    vec[25].hex = 0x0C;
+    strcpy(vec[26].mnemo, "SMOV");
+    vec[26].hex = 0x0D;
+    strcpy(vec[27].mnemo, "SCMP");
+    vec[27].hex = 0x0E;
+    strcpy(vec[28].mnemo, "PUSH");
+    vec[28].hex = 0xFC;
+    strcpy(vec[29].mnemo, "POP");
+    vec[29].hex = 0xFD;
+    strcpy(vec[30].mnemo, "CALL");
+    vec[30].hex = 0xFE;
+    strcpy(vec[31].mnemo, "RET");
+    vec[31].hex = 0xFF0;
 }
 
 void creaReg(Tvec registros[])
@@ -65,8 +79,20 @@ void creaReg(Tvec registros[])
 
     strcpy(registros[0].mnemo, "DS");
     registros[0].hex = 0;
+    strcpy(registros[1].mnemo, "SS");
+    registros[1].hex = 1;
+    strcpy(registros[2].mnemo, "ES");
+    registros[2].hex = 2;
+    strcpy(registros[3].mnemo, "CS");
+    registros[3].hex = 3;
+    strcpy(registros[4].mnemo, "HP");
+    registros[4].hex = 4;
     strcpy(registros[5].mnemo, "IP");
     registros[5].hex = 5;
+    strcpy(registros[6].mnemo, "SP");
+    registros[0].hex = 6;
+    strcpy(registros[7].mnemo, "BP");
+    registros[7].hex = 7;
     strcpy(registros[8].mnemo, "CC");
     registros[8].hex = 8;
     strcpy(registros[9].mnemo, "AC");
@@ -492,3 +518,49 @@ void trunca(int *ValorOperando, int bitsmax)
         printf("Warning Operacion : Truncamiento del Operando %d, valor nuevo: %d\n", valororiginal, (*ValorOperando));
     }
 }
+
+void seteaHeader(char header[],int *tamDS,int *tamES,int *tamSS){
+    char ASM[6];
+    char SEGMENTO[8];
+    char numchar[8];
+    int i,j,num;
+    for (i=0;i<5;i++)
+        ASM[i] = header[i];
+    ASM[5] = '\0';
+    i++;
+    if (strcmpi(header,"\\ASM")){
+        //ciclo hasta terminar el string
+        while(header[i]){
+            j=0; //auxiliar para avanzar en la cadena
+            while(header[i] == ' ' || header[i] == '\t' || header[i]=='\n')
+                i++;
+            //si no me cai entro al if
+            if (header[i]){
+                while(header[i] != '='){
+                    SEGMENTO[j] = header[i];
+                    j++;
+                    i++;
+                }
+                SEGMENTO[j]='\0';
+                i++; //salteo el igual
+                j=0;
+                while(header[i] != ' ' && header[i] !='\n'){
+                    numchar[j] = header[i];
+                    j++;
+                    i++;
+                }
+                numchar[j]='\0';
+                num = strtol(numchar,NULL,10);
+                if (strcmpi(SEGMENTO,"DATA")==0)
+                    *tamDS = num;
+                else if (strcmpi(SEGMENTO,"EXTRA")==0)
+                    *tamES = num;
+                else if (strcmpi(SEGMENTO,"STACK")==0)
+                    *tamSS = num;
+            }
+        }
+    }
+    else
+        printf("Warning: %s deberia ser \\ASM",ASM);
+}
+
