@@ -16,6 +16,8 @@ typedef struct
 {
     char nombre[10];
     int linea;
+    int String; //=0 si no es Const String, sino el largo del string
+    char str[200];
 } Rotulo;
 
 typedef struct
@@ -47,7 +49,7 @@ void creadicc(Tvec[]);
 int encuentramnemo(char[], Tvec[], int);
 void tipoOperando(char[], int *, int *, int, TvecRotulo, int, int *);
 int traduceInstruccion(instruccion);
-void agregaRotulo(TvecRotulo *, char[], int);
+void agregaRotulo(TvecRotulo *, char[], int,int,char[]);
 void cargaRotulos(TvecCadenas[], int, TvecRotulo *);
 void Desarma(char[], instruccion *, lineacod *, Tvec[], TvecRotulo *, int, int *, int *);
 int buscaRotulo(char[], TvecRotulo);

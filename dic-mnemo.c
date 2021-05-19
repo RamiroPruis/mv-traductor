@@ -264,15 +264,18 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
 {
     char cod[MAX];
     char equ[MAX];
-    Rotulo rotAux;
+
     char cadenaActual[256];
     int valorConst;
     char valorConstCAD[10];
     char base='\0';
     int j, k, l = 0;
+    int largoString = 0;
+    char str[200]={"\0"};
     //Recorremos las lineas en busqueda de rotulos
     for (int i = 0; i <= n; i++)
     {
+        largoString= 0;
         //Leemos hasta que el siguiente sea ':'
         strcpy(cadenaActual, vec[i].cadena);
         j = 0;
@@ -296,7 +299,7 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
                 if (buscaRotulo(cod, *rotulos) == -1)
                 {
                     (*rotulos).tope++;
-                    agregaRotulo(rotulos, cod, l);
+                    agregaRotulo(rotulos, cod, l,largoString,"\0");
                 }
             }
             //posible constante
@@ -319,34 +322,51 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
                   j++;
                 }
                 valorConstCAD[k]='\0';
-                if (valorConstCAD[0] == '#' || valorConstCAD[0] == '@' || valorConstCAD[0] == '%' || valorConstCAD[0] == '\'')
-                {
-                  base = valorConstCAD[0];
-                  k = 0;
-                  while (valorConstCAD[k] != '\0')
+                k = 0;
+                if (valorConstCAD[0] != '"'){
+                  if (valorConstCAD[0] == '#' || valorConstCAD[0] == '@' || valorConstCAD[0] == '%' || valorConstCAD[0] == '\'')
                   {
-                    valorConstCAD[k] = valorConstCAD[k + 1];
-                    k++;
+                    base = valorConstCAD[0];
+                    while (valorConstCAD[k] != '\0')
+                    {
+                      valorConstCAD[k] = valorConstCAD[k + 1];
+                      k++;
+                    }
+                  }
+                  switch (base)
+                  {
+                    case '#':
+                      valorConst = strtol(valorConstCAD, NULL, 10);
+                      break;
+                    case '@':
+                      valorConst = strtol(valorConstCAD, NULL, 8);
+                      break;
+                    case '%':
+                      valorConst = strtol(valorConstCAD, NULL, 16);
+                      break;
+                    case '\'':
+                      valorConst = valorConstCAD[0];
+                      break;
+                    default:
+                      valorConst = strtol(valorConstCAD, NULL, 10);
+                      break;
                   }
                 }
-                switch (base)
-                {
-                  case '#':
-                    valorConst = strtol(valorConstCAD, NULL, 10);
-                    break;
-                  case '@':
-                    valorConst = strtol(valorConstCAD, NULL, 8);
-                    break;
-                  case '%':
-                    valorConst = strtol(valorConstCAD, NULL, 16);
-                    break;
-                  default:
-                      valorConst = strtol(valorConstCAD, NULL, 10);
-                    break;
+                //constante String
+                else{
+                  k++;
+                  while(valorConstCAD[k]!= '"'){
+                    str[largoString] = valorConstCAD[k];
+                    largoString++;
+                    k++;
+                  }
+                  str[largoString]='\0';
+                  largoString++;
+
                 }
                 if (buscaRotulo(cod,*rotulos)== -1){
                   (*rotulos).tope++;
-                  agregaRotulo(rotulos,cod,valorConst);
+                  agregaRotulo(rotulos,cod,valorConst,largoString,str);
                 }
               }
             }
@@ -366,12 +386,15 @@ int buscaRotulo(char cod[], TvecRotulo rotulos)
         return -1;
 }
 
-void agregaRotulo(TvecRotulo *rotulos, char cod[], int linea)
+void agregaRotulo(TvecRotulo *rotulos, char cod[], int linea, int String,char str[])
 {
     Rotulo rotAux;
 
     rotAux.linea = linea;
     strcpy(rotAux.nombre, cod);
+    rotAux.String = String;
+    if (String)
+      strcpy(rotAux.str,str);
     (*rotulos).rot[(*rotulos).tope] = rotAux; //Medio enroscado, pero hace que el tema rotulo quede todo en una sola estructora, charlar con los chicos
 }
 
@@ -386,12 +409,11 @@ void IniciaCadena(lineacod *LineaCodigo)
 
 void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemos[], TvecRotulo *rotulos, int nroLinea, int *traduce, int *vacia)
 {
-    char lineaentera[500];
     char cod[MAX] = "\0",equ[4];
     char A[MAX] = "\0";
     char B[MAX] = "\0";
     char C[MAX] = "\0";
-    int i = 0, j = 0, k = 0, l = 0, pos;
+    int i = 0, j = 0, l = 0, pos;
     *traduce = 1;
     //Inicializamos la instruccion toda en NULL(-1)
     (*inst).cod = (*inst).topA = (*inst).topB = -1;

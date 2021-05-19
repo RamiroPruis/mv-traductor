@@ -15,11 +15,11 @@ int main(int argc, char *argv[])
     int vectorbinario[2000];
     TvecCadenas vecLineas[2000];
     lineacod LineaCodigo;
-    char txt[25];
     int i = 0, j;
     int traduce, creaBin = 1;
     int n, k=0;
-    int tamDS, tamSS, tamES, tamCS;
+    int tamDS, tamSS, tamES;
+    int kString;
     char header[256];
 
     tamDS=tamSS=tamES= 1024; //Por defecto cada segment ocupa 1024
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
             {
                 k--;
                 topeBinario--;
-                printf("\t\t\t%s \n", LineaCodigo.comentario);
+                printf("\t%s \n", LineaCodigo.comentario);
             }
         }
         if (flag == 0 && !vacia)
@@ -118,6 +118,16 @@ int main(int argc, char *argv[])
         i++;
         k++;
     } while (i <= topeLineas);
+
+    //cargo constantes String
+    kString = k;
+    for (int z=0;z<rotulos.tope;z++){
+      if (rotulos.rot[z].String){
+        rotulos.rot[z].linea = kString;
+        kString += rotulos.rot[z].String;
+      }
+    }
+
 
     if (creaBin)
     {
@@ -135,7 +145,7 @@ int main(int argc, char *argv[])
         fwrite(&tamDS,sizeof(int),1,arch);
         fwrite(&tamSS,sizeof(int),1,arch);
         fwrite(&tamES,sizeof(int),1,arch);
-        fwrite(&topeLineas,sizeof(int),1,arch);
+        fwrite(&kString,sizeof(int),1,arch);
         //HEADER
 
         //ARRANCA A ESCRIBIR EL CODIGO TRADUCIDO
@@ -144,6 +154,15 @@ int main(int argc, char *argv[])
             fwrite(&(vectorbinario[i]), sizeof(int), 1, arch);
             i++;
         }
+        while(i <= kString){
+          j=0;
+          for(int z=0;z<rotulos.tope;z++)
+            if (rotulos.rot[z].String)
+              for(j=0;j<=rotulos.rot[z].String;j++)
+                fwrite(&rotulos.rot[z].str[j],sizeof(char),1,arch);
+          i++;
+        }
+
         fclose(arch);
         printf("Archivo binario creado con exito. Traduccion exitosa");
     }
