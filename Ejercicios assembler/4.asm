@@ -1,3 +1,5 @@
+//ASM
+
     xor     [%FF], [%FF]
     add     [%FF], %F 
     mov     ax, %8
@@ -14,7 +16,7 @@ CMP1:   cmp     fx, 0
         or    ax, %100
 SYS2:    sys     2
     shl     [%FF], 1
-    jmp     CMP1
+    jmp     [AX]
 line: and    ax, %EFF
     jmp     SYS2
 FIN: stop    

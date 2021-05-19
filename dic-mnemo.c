@@ -132,11 +132,12 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
     Tvec reg[16];
 
     creaReg(reg);
+    *tipo = 0;
 
     if (entrada[i] == '[')
     { //Operando indirecto
         i++;
-        if (entrada[i] >= 'A' && entrada[i] <= 'Z')
+        if (entrada[i] >= 'A' && entrada[i] <= 'z')
             *tipo = 3; //Operando indirecto con contenido indirecto
         else
             *tipo = 2; //Operando indirecto con contenido inmediato
@@ -285,7 +286,7 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
     int largoString = 0;
     char str[200]={"\0"};
     //Recorremos las lineas en busqueda de rotulos
-    for (int i = 0; i <= n; i++)
+    for (int i=0; i<=n; i++)
     {
         largoString= 0;
         //Leemos hasta que el siguiente sea ':'
@@ -295,7 +296,6 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
         comeBasura(cadenaActual, &j);
         if (cadenaActual[0] != '\0' && cadenaActual[0] != ';')
         {
-
             while (cadenaActual[j] != ' ' && cadenaActual[j] != ':')
             {
                 cod[k] = cadenaActual[j];

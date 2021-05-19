@@ -1,10 +1,10 @@
 \\ASM DATA=10  STACK=3000
 
-v1 EQU 2
+v1 equ 2
 ; Bueno, ya hemos terminado o casi...
-        mov     [0], %62
-        mov     CX, 2
-        mov     [CX+v2], 101
+		mov     [0], %62
+        mov     [1], v1
+        mov     [2], 101
         mov     [3], #110
         mov     [4], 'o'
         mov     ex, ' '
@@ -17,8 +17,9 @@ CMP2:   cmp     15,%10
         jn      COM2
         jmp     COM4
 COM2:   and     [1], ex
-CMP3:   cmp     %20,' 
-        jz      COM3
+CMP3:   cmp     %20,'
+        mov		ax,2
+		jz      COM3
         jmp     CMP3
 COM3:   and     [2], ex
 CMP4:   cmp     '(',')'

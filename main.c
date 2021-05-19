@@ -51,8 +51,9 @@ int main(int argc, char *argv[])
     //     }
     // }
     // COMIENZA Lectura del archivo .asm
-    if ((arch = fopen("Ejercicios assembler\\5.asm", "r")) == NULL)
+    if ((arch = fopen("Ejercicios assembler\\prueba.asm", "r")) == NULL)
         return 1;
+
 
     //LEE HEADER
     fgets(header,256,arch);
@@ -61,7 +62,6 @@ int main(int argc, char *argv[])
 
     while (fgets(vecLineas[topeLineas].cadena, 256, arch) != NULL){
         j=0;
-
         while(vecLineas[topeLineas].cadena[j]!= 13 && vecLineas[topeLineas].cadena[j]!= '\n')
             j++;
         if (j!=0)
@@ -80,7 +80,6 @@ int main(int argc, char *argv[])
 
     //carga de Rotulos y constantes
       cargaRotulos(vecLineas,topeLineas,&rotulos);
-
 
     //Ciclo desarmado
 
