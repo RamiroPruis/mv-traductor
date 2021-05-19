@@ -126,6 +126,7 @@ int encuentramnemo(char mnem[], Tvec vec[], int max)
 void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, TvecRotulo rotulos, int nroLinea, int *traduce)
 {
     int i = 0, j = 0, pos;
+    int offset = 0;
     char base = '\0';
     char num[15];
     Tvec reg[16];
@@ -135,7 +136,10 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
     if (entrada[i] == '[')
     { //Operando indirecto
         i++;
-        *tipo = 2;
+        if (entrada[i] >= 'A' && entrada[i] <= 'Z')
+            *tipo = 3; //Operando indirecto con contenido indirecto
+        else
+            *tipo = 2; //Operando indirecto con contenido inmediato
         do
         {
             num[j] = entrada[i];
@@ -146,6 +150,35 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
     }
     else
         strcpy(num, entrada);
+    if (*tipo == 3){
+       j=0;
+       int k=0;
+       char regAct[3],offsetcad[20];
+
+       while(num[j] && num[j] != '+' && num[j] != '-'){
+            regAct[j]=num[j];
+            j++;
+       }
+       regAct[j] = '\0';
+       j++;
+       pos = encuentramnemo(regAct,reg,16);
+       //caso con offset
+       if (!num[j]){
+        while(num[j]){
+            offsetcad[k] = num[j];
+            k++;
+            j++;
+        }
+        offsetcad[k]='\0';
+        //tiene que identificar si es una constante o un numero
+        offset = strtol(offsetcad,NULL,10);
+       }
+       *operando = pos;
+       offset = offset << 4;
+       *operando &= 0x00F;
+       *operando |= offset;
+       exit(0); //hago esto para salir de la funcion rapido sin cambiar las condiciones de los if para agregar el nuevo tipo
+    }
     pos = (*tipo != 2) ? encuentramnemo(num, reg, 16) : -1;
     if (pos != -1)
     { //Operando registro
@@ -220,7 +253,7 @@ int traduceInstruccion(instruccion inst)
         resultado = ((inst.cod << 28) & 0xF0000000) | ((inst.topA << 26) & 0x0C000000) | ((inst.topB << 24) & 0x03000000) | ((inst.vopA << 12) & 0x00FFF000) | (inst.vopB & 0x00000FFF);
     //Instruccion de un operando
     else if (inst.cod >= 240 && inst.cod <= 251)
-        resultado = ((inst.cod << 24) & 0xFF000000) | ((inst.topA << 22) & 0x00C00000) | (inst.vopA & 0x00000FFF);
+        resultado = ((inst.cod << 24) & 0xFF000000) | ((inst.topA << 22) & 0x00C00000) | (inst.vopA & 0x0000FFFF);
     //Instrucciones sin operando
     else
         resultado = (inst.cod << 20) & 0xFFF00000;
@@ -230,8 +263,12 @@ int traduceInstruccion(instruccion inst)
 void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
 {
     char cod[MAX];
+    char equ[MAX];
     Rotulo rotAux;
     char cadenaActual[256];
+    int valorConst;
+    char valorConstCAD[10];
+    char base='\0';
     int j, k, l = 0;
     //Recorremos las lineas en busqueda de rotulos
     for (int i = 0; i <= n; i++)
@@ -252,6 +289,7 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
             }
             cod[k] = '\0';
             //Caso rotulo
+            k = 0;
             if (cadenaActual[j] == ':')
             {
                 //Vemos si el rotulo no existe
@@ -260,6 +298,57 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
                     (*rotulos).tope++;
                     agregaRotulo(rotulos, cod, l);
                 }
+            }
+            //posible constante
+            else{
+              comeBasura(cadenaActual,&j);
+              while (cadenaActual[j] != ' ' && cadenaActual[j] != '\0'){
+                equ[k] = cadenaActual[j];
+                k++;
+                j++;
+              }
+              equ[k]='\0';
+              k=0;
+              //encuentra constante
+              if(strcmpi(equ,"EQU")== 0){
+                comeBasura(cadenaActual,&j);
+                //carga el valor con su respectiva base en valorConst
+                while(cadenaActual[j]){
+                  valorConstCAD[k] = cadenaActual[j];
+                  k++;
+                  j++;
+                }
+                valorConstCAD[k]='\0';
+                if (valorConstCAD[0] == '#' || valorConstCAD[0] == '@' || valorConstCAD[0] == '%' || valorConstCAD[0] == '\'')
+                {
+                  base = valorConstCAD[0];
+                  k = 0;
+                  while (valorConstCAD[k] != '\0')
+                  {
+                    valorConstCAD[k] = valorConstCAD[k + 1];
+                    k++;
+                  }
+                }
+                switch (base)
+                {
+                  case '#':
+                    valorConst = strtol(valorConstCAD, NULL, 10);
+                    break;
+                  case '@':
+                    valorConst = strtol(valorConstCAD, NULL, 8);
+                    break;
+                  case '%':
+                    valorConst = strtol(valorConstCAD, NULL, 16);
+                    break;
+                  default:
+                      valorConst = strtol(valorConstCAD, NULL, 10);
+                    break;
+                }
+                if (buscaRotulo(cod,*rotulos)== -1){
+                  (*rotulos).tope++;
+                  agregaRotulo(rotulos,cod,valorConst);
+                }
+              }
             }
             l++;
         }
@@ -298,7 +387,7 @@ void IniciaCadena(lineacod *LineaCodigo)
 void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemos[], TvecRotulo *rotulos, int nroLinea, int *traduce, int *vacia)
 {
     char lineaentera[500];
-    char cod[MAX] = "\0";
+    char cod[MAX] = "\0",equ[4];
     char A[MAX] = "\0";
     char B[MAX] = "\0";
     char C[MAX] = "\0";
@@ -315,7 +404,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     }
     cod[j] = '\0';
     j = 0;
-    //Caso con rotulo
+    //Caso con rotulo o declaracion de constante
     if (cadena[i] == ':')
     {
         sprintf((*LineaCodigo).cod, "%s:", cod);
@@ -342,6 +431,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
 
     //Para que no se rompa
     //strcpy((*LineaCodigo).comentario, cod);
+
     pos = encuentramnemo(cod, mnemos, 24); //busco la posicion del mnemonico en el diccionario, si no encuentro devuelve -1
     //Agrego codigo instruccion
     if (pos != -1)
@@ -454,14 +544,26 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     {
         *traduce = 0;
         comeBasura(cadena, &i);
-        if (cadena[i] != ';' && cadena[i] != ' ' && cadena[i] != '\0' && cadena[i] != '\n')
+        j=0;
+        if (cadena[i] != ';' && cadena[i] != ' ' && cadena[i] != '\0' && cadena[i] != '\n' && cadena[i] != 'e' && cadena[i] !='E')
         {
             printf("ERROR:\tNo existe la instruccion ingresada\n");
         }
-        else
-        {
+        else if (cadena[i] =='e' || cadena[i]=='E'){
+          while(cadena[i] != ' '){
+            equ[j] = cadena[i];
+            j++;
+            i++;
+          }
+          equ[j]='\0';
+          if (strcmpi(equ,"EQU")==0){
+            strcpy((*LineaCodigo).comentario,cadena);
             *vacia = 1;
+          }
+
         }
+        else
+            *vacia = 1;
     }
     strcpy((*LineaCodigo).op1, A);
     strcpy((*LineaCodigo).op2, B);
@@ -469,7 +571,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     { //no cambia de linea, entonces tengo un comentario u otra instruccion;
         if (cadena[i] == ';')
         {
-            j = 0;
+            j=0;
             while (cadena[i] != '\n' && cadena[i] != '\0')
             {
                 (*LineaCodigo).comentario[j] = cadena[i];
@@ -563,4 +665,6 @@ void seteaHeader(char header[],int *tamDS,int *tamES,int *tamSS){
     else
         printf("Warning: %s deberia ser \\ASM",ASM);
 }
+
+
 

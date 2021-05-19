@@ -56,7 +56,6 @@ int main(int argc, char *argv[])
 
     //LEE HEADER
     fgets(header,256,arch);
-    printf("%s\n",header);
     seteaHeader(header,&tamDS,&tamES,&tamSS);
     //LEE HEADER
 
@@ -79,7 +78,9 @@ int main(int argc, char *argv[])
     fclose(arch);
     // FIN Lectura del archivo .asm
 
-    cargaRotulos(vecLineas, topeLineas, &rotulos);
+    //carga de Rotulos y constantes
+      cargaRotulos(vecLineas,topeLineas,&rotulos);
+
 
     //Ciclo desarmado
 

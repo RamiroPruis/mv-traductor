@@ -1,9 +1,10 @@
 \\ASM DATA=10  STACK=3000
 
+PRUEBA EQU 101
 ; Bueno, ya hemos terminado o casi...
         mov     [0], %62
         mov     [1], @165
-        mov     [2], 101
+        mov     [2], PRUEBA
         mov     [3], #110
         mov     [4], 'o'
         mov     ex, ' '
