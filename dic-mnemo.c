@@ -163,7 +163,7 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
        j++;
        pos = encuentramnemo(regAct,reg,16);
        //caso con offset
-       if (!num[j]){
+       if (num[j]!='\0'){
         while(num[j]){
             offsetcad[k] = num[j];
             k++;
@@ -171,13 +171,25 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
         }
         offsetcad[k]='\0';
         //tiene que identificar si es una constante o un numero
-        offset = strtol(offsetcad,NULL,10);
+        //constante
+        if (offsetcad[0] >= 'A' && offsetcad[0] <= "z"){
+          pos = buscaRotulo(offsetcad,rotulos);
+          if (pos == -1){
+            printf ("ERROR:\tSimbolo inexistente : %s\n",offsetcad);
+            *traduce = 0;
+          }
+          else
+            offset = rotulos.rot[pos].linea;
+        //numero
+        }else
+          offset = strtol(offsetcad,NULL,10);
        }
        *operando = pos;
        offset = offset << 4;
+
        *operando &= 0x00F;
        *operando |= offset;
-       exit(0); //hago esto para salir de la funcion rapido sin cambiar las condiciones de los if para agregar el nuevo tipo
+       return; //hago esto para salir de la funcion rapido sin cambiar las condiciones de los if para agregar el nuevo tipo
     }
     pos = (*tipo != 2) ? encuentramnemo(num, reg, 16) : -1;
     if (pos != -1)
