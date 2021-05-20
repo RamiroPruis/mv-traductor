@@ -90,7 +90,7 @@ void creaReg(Tvec registros[])
     strcpy(registros[5].mnemo, "IP");
     registros[5].hex = 5;
     strcpy(registros[6].mnemo, "SP");
-    registros[0].hex = 6;
+    registros[6].hex = 6;
     strcpy(registros[7].mnemo, "BP");
     registros[7].hex = 7;
     strcpy(registros[8].mnemo, "CC");
@@ -129,6 +129,7 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
     int offset = 0;
     char base = '\0';
     char num[15];
+    int suma=0;
     Tvec reg[16];
 
     creaReg(reg);
@@ -160,6 +161,7 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
             regAct[j]=num[j];
             j++;
        }
+       suma = (num[j] == '+');
        regAct[j] = '\0';
        j++;
        pos = encuentramnemo(regAct,reg,16);
@@ -185,9 +187,11 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
         }else
           offset = strtol(offsetcad,NULL,10);
        }
+       //caso de offset negativo
+       if (!suma)
+          offset = ~offset;
        *operando = pos;
        offset = offset << 4;
-
        *operando &= 0x00F;
        *operando |= offset;
        return; //hago esto para salir de la funcion rapido sin cambiar las condiciones de los if para agregar el nuevo tipo
@@ -265,7 +269,7 @@ int traduceInstruccion(instruccion inst)
     if (inst.cod >= 0 && inst.cod <= 11)
         resultado = ((inst.cod << 28) & 0xF0000000) | ((inst.topA << 26) & 0x0C000000) | ((inst.topB << 24) & 0x03000000) | ((inst.vopA << 12) & 0x00FFF000) | (inst.vopB & 0x00000FFF);
     //Instruccion de un operando
-    else if (inst.cod >= 240 && inst.cod <= 251)
+    else if (inst.cod >= 0xF0 && inst.cod <= 0xFE)
         resultado = ((inst.cod << 24) & 0xFF000000) | ((inst.topA << 22) & 0x00C00000) | (inst.vopA & 0x0000FFFF);
     //Instrucciones sin operando
     else
@@ -294,9 +298,9 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
         j = 0;
         k = 0;
         comeBasura(cadenaActual, &j);
-        if (cadenaActual[0] != '\0' && cadenaActual[0] != ';')
+        if (cadenaActual[j] != '\0' && cadenaActual[j] != ';')
         {
-            while (cadenaActual[j] != ' ' && cadenaActual[j] != ':')
+            while (cadenaActual[j] != ' ' && cadenaActual[j] != ':' && cadenaActual[j] !='\t')
             {
                 cod[k] = cadenaActual[j];
                 j++;
@@ -311,7 +315,7 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
                 if (buscaRotulo(cod, *rotulos) == -1)
                 {
                     (*rotulos).tope++;
-                    agregaRotulo(rotulos, cod, l,largoString,"\0");
+                    agregaRotulo(rotulos, cod, l,largoString,str);
                 }
             }
             //posible constante
@@ -379,11 +383,13 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
                 if (buscaRotulo(cod,*rotulos)== -1){
                   (*rotulos).tope++;
                   agregaRotulo(rotulos,cod,valorConst,largoString,str);
+                  l--;
                 }
               }
             }
             l++;
         }
+
     }
 }
 
@@ -466,7 +472,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
     //Para que no se rompa
     //strcpy((*LineaCodigo).comentario, cod);
 
-    pos = encuentramnemo(cod, mnemos, 24); //busco la posicion del mnemonico en el diccionario, si no encuentro devuelve -1
+    pos = encuentramnemo(cod, mnemos, 31); //busco la posicion del mnemonico en el diccionario, si no encuentro devuelve -1
     //Agrego codigo instruccion
     if (pos != -1)
     {
@@ -522,7 +528,7 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
         }
         else
         {
-            if ((*inst).cod < 0xFF1) //1 operando
+            if ((*inst).cod < 0xFF0) //1 operando
             {
                 j = 0;
                 comeBasura(cadena, &i);

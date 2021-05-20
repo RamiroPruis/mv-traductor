@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     //     }
     // }
     // COMIENZA Lectura del archivo .asm
-    if ((arch = fopen("Ejercicios assembler\\prueba.asm", "r")) == NULL)
+    if ((arch = fopen("Ejercicios assembler\\Ej1.asm", "r")) == NULL)
         return 1;
 
 
@@ -77,7 +77,6 @@ int main(int argc, char *argv[])
  //       vecLineas[i].cadena[strlen(vecLineas[i].cadena) - 1] = '\0';
     fclose(arch);
     // FIN Lectura del archivo .asm
-
     //carga de Rotulos y constantes
       cargaRotulos(vecLineas,topeLineas,&rotulos);
 
@@ -127,13 +126,12 @@ int main(int argc, char *argv[])
       }
     }
 
-
     if (creaBin)
     {
         i = 0;
         char FIJO[5] = "MV21";
 
-        if ((arch = fopen("Ejercicios assembler\\5.bin", "wb")) == NULL)
+        if ((arch = fopen("Ejercicios assembler\\Ej1.bin", "wb")) == NULL)
         {
             return -1;
         }
