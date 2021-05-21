@@ -5,6 +5,27 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "request": "attach",
+            "name": "Attach by Process ID",
+            "processId": "${command:PickJavaProcess}"
+        },
+
+        {
+            "type": "java",
+            "name": "Launch hello",
+            "request": "launch",
+            "mainClass": "hello",
+            "projectName": "pruebe_6910ccc5"
+        },
+        {
+            "type": "java",
+            "name": "Launch InstallJava",
+            "request": "launch",
+            "mainClass": "InstallJava",
+            "projectName": "pruebe_6910ccc5"
+        },
+        {
             "name": "gcc.exe - Compilar y depurar el archivo activo",
             "type": "cppdbg",
             "request": "launch",
@@ -15,7 +36,7 @@
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "C:\\mingw64\\bin\\gdb.exe",
+            "miDebuggerPath": "E:\\Datos\\Programas\\Programacion\\mingw64\\bin\\gdb.exe",
             "setupCommands": [
                 {
                     "description": "Habilitar la impresión con sangría para gdb",
@@ -23,7 +44,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "C/C++: gcc.exe compilar archivo activo"
+            "preLaunchTask": "C/C++: gcc.exe build active file"
         }
     ]
 }

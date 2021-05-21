@@ -83,3 +83,17 @@
 	<string.h>
 	"dic-mnemo.h"
 
+1621608234 source:e:\datos\escritorio\mvc\mv-traductor\dic-mnemo.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"dic-mnemo.h"
+
+1621462639 e:\datos\escritorio\mvc\mv-traductor\dic-mnemo.h
+
+1621608269 source:e:\datos\escritorio\mvc\mv-traductor\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"dic-mnemo.h"
+

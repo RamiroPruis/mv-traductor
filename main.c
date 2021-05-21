@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     //     }
     // }
     // COMIENZA Lectura del archivo .asm
-    if ((arch = fopen("Ejercicios assembler\\Ej1.asm", "r")) == NULL)
+    if ((arch = fopen("Ejercicios assembler\\Ej1OS.asm", "r")) == NULL)
         return 1;
 
 
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
         i = 0;
         char FIJO[5] = "MV21";
 
-        if ((arch = fopen("Ejercicios assembler\\Ej1.bin", "wb")) == NULL)
+        if ((arch = fopen("Ejercicios assembler\\Ej1OS.bin", "wb")) == NULL)
         {
             return -1;
         }
