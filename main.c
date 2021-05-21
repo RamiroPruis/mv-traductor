@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     //     }
     // }
     // COMIENZA Lectura del archivo .asm
-    if ((arch = fopen("Ejercicios assembler\\Ej1OS.asm", "r")) == NULL)
+    if ((arch = fopen("Ejercicios assembler\\str.asm", "r")) == NULL)
         return 1;
 
 
@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
 
     //cargo constantes String
     kString = k;
-    for (int z=0;z<rotulos.tope;z++){
+    for (int z=0;z<=rotulos.tope;z++){
       if (rotulos.rot[z].String){
         rotulos.rot[z].linea = kString;
         kString += rotulos.rot[z].String;
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
         i = 0;
         char FIJO[5] = "MV21";
 
-        if ((arch = fopen("Ejercicios assembler\\Ej1OS.bin", "wb")) == NULL)
+        if ((arch = fopen("Ejercicios assembler\\str.bin", "wb")) == NULL)
         {
             return -1;
         }
@@ -151,15 +151,10 @@ int main(int argc, char *argv[])
             fwrite(&(vectorbinario[i]), sizeof(int), 1, arch);
             i++;
         }
-        while(i <= kString){
-          j=0;
-          for(int z=0;z<rotulos.tope;z++)
+        for(int z=0;z<=rotulos.tope;z++)
             if (rotulos.rot[z].String)
               for(j=0;j<=rotulos.rot[z].String;j++)
                 fwrite(&rotulos.rot[z].str[j],sizeof(char),1,arch);
-          i++;
-        }
-
         fclose(arch);
         printf("Archivo binario creado con exito. Traduccion exitosa");
     }

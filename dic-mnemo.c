@@ -179,7 +179,7 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
             offsetcad[k] = '\0';
             //tiene que identificar si es una constante o un numero
             //constante
-            if (offsetcad[0] >= 'A' && offsetcad[0] <= "z")
+            if (offsetcad[0] >= 'A' && offsetcad[0] <= 'z')
             {
                 pos = buscaRotulo(offsetcad, rotulos);
                 if (pos == -1)
@@ -383,6 +383,7 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
                     //constante String
                     else
                     {
+                        valorConst = n;
                         k++;
                         while (valorConstCAD[k] != '"')
                         {
@@ -392,6 +393,7 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
                         }
                         str[largoString] = '\0';
                         largoString++;
+                        n += largoString;
                     }
                     if (buscaRotulo(cod, *rotulos) == -1)
                     {
@@ -403,6 +405,12 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
             }
             l++;
         }
+    }
+    for (int i=0;i<=rotulos->tope;i++){
+      if (rotulos->rot[i].String){
+        rotulos->rot[i].linea = l;
+        l += rotulos->rot[i].String;
+      }
     }
 }
 
