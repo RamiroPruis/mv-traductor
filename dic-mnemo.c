@@ -125,7 +125,7 @@ int encuentramnemo(char mnem[], Tvec vec[], int max)
 //tipo tiene que entrar con un valor
 void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, TvecRotulo rotulos, int nroLinea, int *traduce)
 {
-    int i = 0, j = 0, pos;
+    int i = 0, j = 0, pos, pos2;
     int offset = 0;
     char base = '\0';
     char num[15];
@@ -181,14 +181,14 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
             //constante
             if (offsetcad[0] >= 'A' && offsetcad[0] <= 'z')
             {
-                pos = buscaRotulo(offsetcad, rotulos);
-                if (pos == -1)
+                pos2 = buscaRotulo(offsetcad, rotulos);
+                if (pos2 == -1)
                 {
                     printf("ERROR:\tSimbolo inexistente : %s\n", offsetcad);
                     *traduce = 0;
                 }
                 else
-                    offset = rotulos.rot[pos].linea;
+                    offset = rotulos.rot[pos2].linea;
                 //numero
             }
             else
@@ -406,11 +406,13 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
             l++;
         }
     }
-    for (int i=0;i<=rotulos->tope;i++){
-      if (rotulos->rot[i].String){
-        rotulos->rot[i].linea = l;
-        l += rotulos->rot[i].String;
-      }
+    for (int i = 0; i <= rotulos->tope; i++)
+    {
+        if (rotulos->rot[i].String)
+        {
+            rotulos->rot[i].linea = l;
+            l += rotulos->rot[i].String;
+        }
     }
 }
 

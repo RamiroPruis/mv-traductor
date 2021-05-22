@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
     //     }
     // }
     // COMIENZA Lectura del archivo .asm
-    if ((arch = fopen("Ejercicios assembler\\Ej1OS.asm", "r")) == NULL)
+    if ((arch = fopen("Ejercicios assembler\\Ej2.asm", "r")) == NULL)
         return 1;
 
     //LEE HEADER
@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
 
     //cargo constantes String
     kString = k;
-    for (int z = 0; z < rotulos.tope; z++)
+    for (int z = 0; z <= rotulos.tope; z++)
     {
         if (rotulos.rot[z].String)
         {
@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
         i = 0;
         char FIJO[5] = "MV21";
 
-        if ((arch = fopen("Ejercicios assembler\\Ej1OS.bin", "wb")) == NULL)
+        if ((arch = fopen("Ejercicios assembler\\str.bin", "wb")) == NULL)
         {
             return -1;
         }
@@ -214,16 +214,10 @@ int main(int argc, char *argv[])
             fwrite(&(vectorbinario[i]), sizeof(int), 1, arch);
             i++;
         }
-        while (i <= kString)
-        {
-            j = 0;
-            for (int z = 0; z < rotulos.tope; z++)
-                if (rotulos.rot[z].String)
-                    for (j = 0; j <= rotulos.rot[z].String; j++)
-                        fwrite(&rotulos.rot[z].str[j], sizeof(char), 1, arch);
-            i++;
-        }
-
+        for (int z = 0; z <= rotulos.tope; z++)
+            if (rotulos.rot[z].String)
+                for (j = 0; j <= rotulos.rot[z].String; j++)
+                    fwrite(&rotulos.rot[z].str[j], sizeof(char), 1, arch);
         fclose(arch);
         printf("Archivo binario creado con exito. Traduccion exitosa");
     }
@@ -355,7 +349,7 @@ int encuentramnemo(char mnem[], Tvec vec[], int max)
 //tipo tiene que entrar con un valor
 void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, TvecRotulo rotulos, int nroLinea, int *traduce)
 {
-    int i = 0, j = 0, pos;
+    int i = 0, j = 0, pos, pos2;
     int offset = 0;
     char base = '\0';
     char num[15];
@@ -411,14 +405,14 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
             //constante
             if (offsetcad[0] >= 'A' && offsetcad[0] <= 'z')
             {
-                pos = buscaRotulo(offsetcad, rotulos);
-                if (pos == -1)
+                pos2 = buscaRotulo(offsetcad, rotulos);
+                if (pos2 == -1)
                 {
                     printf("ERROR:\tSimbolo inexistente : %s\n", offsetcad);
                     *traduce = 0;
                 }
                 else
-                    offset = rotulos.rot[pos].linea;
+                    offset = rotulos.rot[pos2].linea;
                 //numero
             }
             else
@@ -613,6 +607,7 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
                     //constante String
                     else
                     {
+                        valorConst = n;
                         k++;
                         while (valorConstCAD[k] != '"')
                         {
@@ -622,6 +617,7 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
                         }
                         str[largoString] = '\0';
                         largoString++;
+                        n += largoString;
                     }
                     if (buscaRotulo(cod, *rotulos) == -1)
                     {
@@ -632,6 +628,14 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
                 }
             }
             l++;
+        }
+    }
+    for (int i = 0; i <= rotulos->tope; i++)
+    {
+        if (rotulos->rot[i].String)
+        {
+            rotulos->rot[i].linea = l;
+            l += rotulos->rot[i].String;
         }
     }
 }
