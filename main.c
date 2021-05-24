@@ -151,10 +151,13 @@ int main(int argc, char *argv[])
             fwrite(&(vectorbinario[i]), sizeof(int), 1, arch);
             i++;
         }
+        int letra;
         for(int z=0;z<=rotulos.tope;z++)
             if (rotulos.rot[z].String)
-              for(j=0;j<=rotulos.rot[z].String;j++)
-                fwrite(&rotulos.rot[z].str[j],sizeof(char),1,arch);
+              for(j=0;j<rotulos.rot[z].String;j++){
+                letra = rotulos.rot[z].str[j];
+                fwrite(&letra,sizeof(int),1,arch);
+              }
         fclose(arch);
         printf("Archivo binario creado con exito. Traduccion exitosa");
     }

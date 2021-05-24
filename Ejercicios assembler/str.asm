@@ -1,9 +1,13 @@
-\\ASM DATA=38500
+\\ASM
 	hola equ "hola"
 	chau equ "chau"
-	mov DX,hola
+	ldh 3
+	ldl hola
+	mov dx , AC
 	sys %4
-	mov dx,chau
+	ldh 3
+	ldl chau
+	mov dx , AC
 	sys %4
 	stop
 	

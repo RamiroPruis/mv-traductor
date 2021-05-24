@@ -398,6 +398,7 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
                     if (buscaRotulo(cod, *rotulos) == -1)
                     {
                         (*rotulos).tope++;
+
                         agregaRotulo(rotulos, cod, valorConst, largoString, str);
                         l--;
                     }
@@ -696,7 +697,7 @@ void seteaHeader(char header[], int *tamDS, int *tamES, int *tamSS)
         ASM[i] = header[i];
     ASM[5] = '\0';
     i++;
-    if (strcmpi(header, "\\ASM"))
+    if (strcmpi(ASM, "\\\\ASM")== 0)
     {
         //ciclo hasta terminar el string
         while (header[i])
@@ -738,5 +739,5 @@ void seteaHeader(char header[], int *tamDS, int *tamES, int *tamSS)
         }
     }
     else
-        printf("Warning: %s deberia ser \\ASM", ASM);
+        printf("Warning: %s deberia ser \\\\ASM", ASM);
 }
