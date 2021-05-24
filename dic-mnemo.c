@@ -724,6 +724,10 @@ void seteaHeader(char header[], int *tamDS, int *tamES, int *tamSS)
                 }
                 numchar[j] = '\0';
                 num = strtol(numchar, NULL, 10);
+                if (num>32767 || num<0){ //si es mayor a 2 bytes corta el programa
+                    printf("ERROR:\t el tamano del segmento no es coherente con la arquitectura");
+                    exit(1);
+                }
                 if (strcmpi(SEGMENTO, "DATA") == 0)
                     *tamDS = num;
                 else if (strcmpi(SEGMENTO, "EXTRA") == 0)

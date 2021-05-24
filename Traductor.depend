@@ -111,3 +111,17 @@
 	<string.h>
 	"dic-mnemo.h"
 
+1621890933 source:e:\users\ramiro\documents\facultad\3ro\arqui\maquina-virtual\mv-traductor\mv-traductor\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"dic-mnemo.h"
+
+1621890933 e:\users\ramiro\documents\facultad\3ro\arqui\maquina-virtual\mv-traductor\mv-traductor\dic-mnemo.h
+
+1621891284 source:e:\users\ramiro\documents\facultad\3ro\arqui\maquina-virtual\mv-traductor\mv-traductor\dic-mnemo.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"dic-mnemo.h"
+
