@@ -1,1 +1,1 @@
-holaquet
+har num[15] = {'\0'};

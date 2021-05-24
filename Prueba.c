@@ -62,7 +62,6 @@ void elimEspacio(char[]);
 void trunca(int *, int);
 void IniciaCadena(lineacod *);
 void seteaHeader(char[], int *, int *, int *);
-
 //.h
 
 //COMIENZA  MAIN
@@ -113,7 +112,7 @@ int main(int argc, char *argv[])
     //     }
     // }
     // COMIENZA Lectura del archivo .asm
-    if ((arch = fopen("Ejercicios assembler\\Ej2.asm", "r")) == NULL)
+    if ((arch = fopen("Ejercicios assembler\\Ej3.asm", "r")) == NULL)
         return 1;
 
     //LEE HEADER
@@ -194,7 +193,7 @@ int main(int argc, char *argv[])
         i = 0;
         char FIJO[5] = "MV21";
 
-        if ((arch = fopen("Ejercicios assembler\\str.bin", "wb")) == NULL)
+        if ((arch = fopen("Ejercicios assembler\\Ej3.bin", "wb")) == NULL)
         {
             return -1;
         }
@@ -352,7 +351,7 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
     int i = 0, j = 0, pos, pos2;
     int offset = 0;
     char base = '\0';
-    char num[15];
+    char num[15] = {'\0'};
     int suma = 0;
     Tvec reg[16];
 
@@ -417,10 +416,10 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
             }
             else
                 offset = strtol(offsetcad, NULL, 10);
+            if (!suma)
+                offset = ~offset;
         }
         //caso de offset negativo
-        if (!suma)
-            offset = ~offset;
         *operando = pos;
         offset = offset << 4;
         *operando &= 0x00F;
