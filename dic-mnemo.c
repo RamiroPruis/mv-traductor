@@ -305,7 +305,7 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
         j = 0;
         k = 0;
         comeBasura(cadenaActual, &j);
-        if (cadenaActual[j] != '\0' && cadenaActual[j] != ';')
+        if (cadenaActual[j] != '\0' && cadenaActual[j] != ';' && cadenaActual[j] != '\\')
         {
             while (cadenaActual[j] != ' ' && cadenaActual[j] != ':' && cadenaActual[j] != '\t' && cadenaActual[j] != '\0')
             {
@@ -407,7 +407,6 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
             l++;
         }
     }
-    l--;
     for (int i = 0; i <= rotulos->tope; i++)
     {
         if (rotulos->rot[i].String)

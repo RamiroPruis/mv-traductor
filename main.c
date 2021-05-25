@@ -64,7 +64,6 @@ int main(int argc, char *argv[])
             vecLineas[topeLineas].cadena[j] = '\0';
         if (vecLineas[topeLineas].cadena[0] != '\n' && vecLineas[topeLineas].cadena[0] != '\0')
             topeLineas++;
-
         fflush(stdin);
     }
 
