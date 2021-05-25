@@ -1,6 +1,6 @@
 \\ASM
 hola EQU "hola"
-chau EQU "chau"
+chau EQU "hola"
 
 MAIN:       RND 10
             MOV [10], AC
@@ -16,7 +16,8 @@ MAIN:       RND 10
             LDH 3
             LDL hola
             MOV FX, AC
-            SLEN [10], FX
+            MOV [50], FX
+            SLEN [10], [50]
             MOV DX, 10
             MOV CX, 1
             SYS 2
@@ -24,7 +25,8 @@ MAIN:       RND 10
             LDH 3
             LDL chau
             MOV EX, AC
-            SCMP EX, FX
+            MOV [51], EX
+            SCMP [50], [51]
             MOV BX, 20
             MOV [BX], AC
             MOV DX, BX
