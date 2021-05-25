@@ -407,6 +407,7 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
             l++;
         }
     }
+    l--;
     for (int i = 0; i <= rotulos->tope; i++)
     {
         if (rotulos->rot[i].String)
@@ -609,6 +610,11 @@ void Desarma(char cadena[], instruccion *inst, lineacod *LineaCodigo, Tvec mnemo
         *traduce = 0;
         comeBasura(cadena, &i);
         j = 0;
+        if (strcmpi(cod,"\\\\ASM")==0){
+            strcpy((*LineaCodigo).comentario, cadena);
+            *vacia=1;
+            return;
+        }
         if (cadena[i] != ';' && cadena[i] != ' ' && cadena[i] != '\0' && cadena[i] != '\n' && cadena[i] != 'e' && cadena[i] != 'E')
         {
             printf("ERROR:\tNo existe la instruccion ingresada\n");
@@ -717,7 +723,7 @@ void seteaHeader(char header[], int *tamDS, int *tamES, int *tamSS)
                 SEGMENTO[j] = '\0';
                 i++; //salteo el igual
                 j = 0;
-                while (header[i] != ' ' && header[i] != '\n')
+                while (header[i] != ' ' && header[i] != '\n' && header[i])
                 {
                     numchar[j] = header[i];
                     j++;
@@ -739,6 +745,4 @@ void seteaHeader(char header[], int *tamDS, int *tamES, int *tamSS)
             }
         }
     }
-    else
-        printf("Warning: %s deberia ser \\\\ASM", ASM);
 }
