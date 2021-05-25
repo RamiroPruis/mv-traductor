@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
     }
 
     // COMIENZA Lectura del archivo .asm
+
     if ((arch = fopen(argv[1], "r")) == NULL)
         return 1;
 
@@ -68,6 +69,7 @@ int main(int argc, char *argv[])
     }
 
     topeLineas--;
+
     i=0;
     while (i<=topeLineas && (tamDS == 1024 || tamES == 1024 || tamSS == 1024)){
         seteaHeader(vecLineas[i].cadena,&tamDS,&tamES,&tamSS);
@@ -75,6 +77,7 @@ int main(int argc, char *argv[])
     }
 
     i=0;
+
 
     //   for (int i = 0; i < topeLineas; i++)
     //       vecLineas[i].cadena[strlen(vecLineas[i].cadena) - 1] = '\0';
@@ -136,8 +139,7 @@ int main(int argc, char *argv[])
         i = 0;
         char FIJO[5] = "MV21";
 
-        if ((arch = fopen(argv[2], "wb")) == NULL)
-        {
+        if ((arch = fopen(argv[2], "wb")) == NULL)        {
             return -1;
         }
         // Se rompe

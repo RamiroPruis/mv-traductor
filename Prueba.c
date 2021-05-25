@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
     //     }
     // }
     // COMIENZA Lectura del archivo .asm
-    if ((arch = fopen("Ejercicios assembler\\str.asm", "r")) == NULL)
+    if ((arch = fopen("Ejercicios assembler\\prueba2.asm", "r")) == NULL)
         return 1;
 
     //LEE HEADER
@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
         i = 0;
         char FIJO[5] = "MV21";
 
-        if ((arch = fopen("Ejercicios assembler\\str.bin", "wb")) == NULL)
+        if ((arch = fopen("Ejercicios assembler\\prueba2.bin", "wb")) == NULL)
         {
             return -1;
         }
@@ -229,6 +229,7 @@ int main(int argc, char *argv[])
         printf("No se creo el binario");
     return 0;
 }
+
 //FIN MAIN
 
 void creadicc(Tvec vec[])
@@ -501,7 +502,7 @@ int traduceInstruccion(instruccion inst)
 {
     int resultado = 0;
     //Instruccion de dos operandos
-    if (inst.cod >= 0 && inst.cod <= 11)
+    if (inst.cod >= 0 && inst.cod <= 0xE)
         resultado = ((inst.cod << 28) & 0xF0000000) | ((inst.topA << 26) & 0x0C000000) | ((inst.topB << 24) & 0x03000000) | ((inst.vopA << 12) & 0x00FFF000) | (inst.vopB & 0x00000FFF);
     //Instruccion de un operando
     else if (inst.cod >= 0xF0 && inst.cod <= 0xFE)
@@ -635,6 +636,7 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
             l++;
         }
     }
+    l--;
     for (int i = 0; i <= rotulos->tope; i++)
     {
         if (rotulos->rot[i].String)

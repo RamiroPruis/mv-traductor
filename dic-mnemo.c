@@ -273,7 +273,7 @@ int traduceInstruccion(instruccion inst)
 {
     int resultado = 0;
     //Instruccion de dos operandos
-    if (inst.cod >= 0 && inst.cod <= 11)
+    if (inst.cod >= 0 && inst.cod <= 0xE)
         resultado = ((inst.cod << 28) & 0xF0000000) | ((inst.topA << 26) & 0x0C000000) | ((inst.topB << 24) & 0x03000000) | ((inst.vopA << 12) & 0x00FFF000) | (inst.vopB & 0x00000FFF);
     //Instruccion de un operando
     else if (inst.cod >= 0xF0 && inst.cod <= 0xFE)
