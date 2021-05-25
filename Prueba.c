@@ -62,6 +62,7 @@ void elimEspacio(char[]);
 void trunca(int *, int);
 void IniciaCadena(lineacod *);
 void seteaHeader(char[], int *, int *, int *);
+
 //.h
 
 //COMIENZA  MAIN
@@ -112,7 +113,7 @@ int main(int argc, char *argv[])
     //     }
     // }
     // COMIENZA Lectura del archivo .asm
-    if ((arch = fopen("Ejercicios assembler\\Ej3.asm", "r")) == NULL)
+    if ((arch = fopen("Ejercicios assembler\\str.asm", "r")) == NULL)
         return 1;
 
     //LEE HEADER
@@ -193,7 +194,7 @@ int main(int argc, char *argv[])
         i = 0;
         char FIJO[5] = "MV21";
 
-        if ((arch = fopen("Ejercicios assembler\\Ej3.bin", "wb")) == NULL)
+        if ((arch = fopen("Ejercicios assembler\\str.bin", "wb")) == NULL)
         {
             return -1;
         }
@@ -213,10 +214,14 @@ int main(int argc, char *argv[])
             fwrite(&(vectorbinario[i]), sizeof(int), 1, arch);
             i++;
         }
+        int letra;
         for (int z = 0; z <= rotulos.tope; z++)
             if (rotulos.rot[z].String)
-                for (j = 0; j <= rotulos.rot[z].String; j++)
-                    fwrite(&rotulos.rot[z].str[j], sizeof(char), 1, arch);
+                for (j = 0; j < rotulos.rot[z].String; j++)
+                {
+                    letra = rotulos.rot[z].str[j];
+                    fwrite(&letra, sizeof(int), 1, arch);
+                }
         fclose(arch);
         printf("Archivo binario creado con exito. Traduccion exitosa");
     }
@@ -417,7 +422,7 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
             else
                 offset = strtol(offsetcad, NULL, 10);
             if (!suma)
-                offset = ~offset;
+                offset = ~offset + 1;
         }
         //caso de offset negativo
         *operando = pos;
@@ -621,6 +626,7 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
                     if (buscaRotulo(cod, *rotulos) == -1)
                     {
                         (*rotulos).tope++;
+
                         agregaRotulo(rotulos, cod, valorConst, largoString, str);
                         l--;
                     }
@@ -919,7 +925,7 @@ void seteaHeader(char header[], int *tamDS, int *tamES, int *tamSS)
         ASM[i] = header[i];
     ASM[5] = '\0';
     i++;
-    if (strcmpi(header, "\\ASM"))
+    if (strcmpi(ASM, "\\\\ASM") == 0)
     {
         //ciclo hasta terminar el string
         while (header[i])
@@ -947,6 +953,11 @@ void seteaHeader(char header[], int *tamDS, int *tamES, int *tamSS)
                 }
                 numchar[j] = '\0';
                 num = strtol(numchar, NULL, 10);
+                if (num > 32767 || num < 0)
+                { //si es mayor a 2 bytes corta el programa
+                    printf("ERROR:\t el tamano del segmento no es coherente con la arquitectura");
+                    exit(1);
+                }
                 if (strcmpi(SEGMENTO, "DATA") == 0)
                     *tamDS = num;
                 else if (strcmpi(SEGMENTO, "EXTRA") == 0)
@@ -957,5 +968,5 @@ void seteaHeader(char header[], int *tamDS, int *tamES, int *tamSS)
         }
     }
     else
-        printf("Warning: %s deberia ser \\ASM", ASM);
+        printf("Warning: %s deberia ser \\\\ASM", ASM);
 }

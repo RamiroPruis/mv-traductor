@@ -194,7 +194,7 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
             else
                 offset = strtol(offsetcad, NULL, 10);
             if (!suma)
-                offset = ~offset;
+                offset = ~offset + 1;
         }
         //caso de offset negativo
         *operando = pos;
@@ -697,7 +697,7 @@ void seteaHeader(char header[], int *tamDS, int *tamES, int *tamSS)
         ASM[i] = header[i];
     ASM[5] = '\0';
     i++;
-    if (strcmpi(ASM, "\\\\ASM")== 0)
+    if (strcmpi(ASM, "\\\\ASM") == 0)
     {
         //ciclo hasta terminar el string
         while (header[i])
@@ -725,7 +725,8 @@ void seteaHeader(char header[], int *tamDS, int *tamES, int *tamSS)
                 }
                 numchar[j] = '\0';
                 num = strtol(numchar, NULL, 10);
-                if (num>32767 || num<0){ //si es mayor a 2 bytes corta el programa
+                if (num > 32767 || num < 0)
+                { //si es mayor a 2 bytes corta el programa
                     printf("ERROR:\t el tamano del segmento no es coherente con la arquitectura");
                     exit(1);
                 }
