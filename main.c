@@ -171,6 +171,6 @@ int main(int argc, char *argv[])
     else
         printf("No se creo el binario");
 
-    printf("Gracias por utilizar MV21   ® Copyright © 2021 Grupo D MV Inc. ® ");
+    printf("Gracias por utilizar MV21   ® Copyright © 2021 Grupo D MV Inc. ® \n");
     return 0;
 }
