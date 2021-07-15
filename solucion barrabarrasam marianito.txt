@@ -1,0 +1,10 @@
+/*
+    if (!(tamDS == 1024 || tamES == 1024 || tamSS == 1024)){//LOS SEGMENTOS CAMBIARON, MUEVO TODO
+        topeLineas--;
+        i--;
+        while (i<topeLineas){
+            vecLineas[i]=vecLineas[i+1];
+            i++;
+        }
+    }
+*/

@@ -257,7 +257,7 @@ void tipoOperando(char entrada[], int *tipo, int *operando, int bitsoperando, Tv
                 *operando = num[0];
                 break;
             default:
-                if (num[0] >= 48 && num[0] <= 57) //Si es un numero
+                if ((num[0] >= 48 && num[0] <= 57) || num[0]=='-') //Si es un numero
                     *operando = strtol(num, NULL, 10);
                 else
                     *tipo = -1;
@@ -295,7 +295,7 @@ void cargaRotulos(TvecCadenas vec[], int n, TvecRotulo *rotulos)
     char base = '\0';
     int j, k, l = 0;
     int largoString = 0;
-    char str[200] = {"\0"};
+    char str[500] = {"\0"};
     //Recorremos las lineas en busqueda de rotulos
     for (int i = 0; i <= n; i++)
     {

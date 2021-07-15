@@ -55,6 +55,9 @@ int main(int argc, char *argv[])
     if ((arch = fopen(argv[1], "r")) == NULL)
         return 1;
 
+/*
+    if ((arch = fopen("6.asm", "r")) == NULL)
+        return 1;*/
     while (fgets(vecLineas[topeLineas].cadena, 256, arch) != NULL)
     {
         j = 0;
@@ -92,7 +95,7 @@ int main(int argc, char *argv[])
     {
         vacia = 0;
         IniciaCadena(&LineaCodigo);
-        Desarma(vecLineas[i].cadena, &num, &LineaCodigo, Mnemonicos, &rotulos, k, &traduce, &vacia);
+       Desarma(vecLineas[i].cadena, &num, &LineaCodigo, Mnemonicos, &rotulos, k, &traduce, &vacia);
 
         if (traduce)
         {
@@ -141,6 +144,10 @@ int main(int argc, char *argv[])
         if ((arch = fopen(argv[2], "wb")) == NULL)        {
             return -1;
         }
+        /*
+        if ((arch = fopen("6.bin", "wb")) == NULL)        {
+            return -1;
+        }*/
         // Se rompe
 
         //HEADER
